@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import annaAsset from '../assets/anna.png';
 import CharacterSprite from '../Sprites/CharacterSprite';
+import annaAsset from '../assets/sprites/anna.png';
 
 export default class OverworldScene extends Phaser.Scene {
   preload() {

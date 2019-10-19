@@ -14,7 +14,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     // add our player to the scene
     this.scene.add.existing(this);
     // scale our player
-    this.setScale(4);
+    this.setScale(2);
 
     this.scene.events.emit('playerCreate', this.health);
 
