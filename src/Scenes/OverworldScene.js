@@ -1,18 +1,28 @@
 import Phaser from 'phaser';
 import CharacterSprite from '../Sprites/CharacterSprite';
 import annaAsset from '../assets/sprites/anna.png';
-import starAsset from '../assets/star.png';
+import tilesAsset from '../assets/tiles/spooky-tileset.png';
+import mapAsset from '../assets/maps/spookyhousemap.json';
+import starAsset from '../assets/items/star.png';
+import coinAsset from '../assets/items/coin.png';
 
 export default class OverworldScene extends Phaser.Scene {
   preload() {
     this.load.image('star', starAsset);
+    this.load.image('coin', coinAsset);
     this.load.spritesheet('anna', annaAsset, { frameWidth: 64, frameHeight: 64 });
+
+    this.load.image('spooky-tileset', tilesAsset);
+    this.load.tilemapTiledJSON('map', mapAsset);
   }
 
   create() {
     this.map = this.make.tilemap({ key: 'map' });
-    this.tiles = this.map.addTilesetImage('cybernoid', 'tiles');
+    this.tiles = this.map.addTilesetImage('spooky-tileset', 'spooky-tileset');
     this.layer = this.map.createStaticLayer(0, this.tiles, 0, 0);
+    // this.backgroundLayer = this.map.createStaticLayer(0, this.tiles, 0, 0);
+    // this.doorsLayer = this.map.createStaticLayer(0, this.tiles, 0, 0);
+    // this.playerLayer = this.map.createStaticLayer(0, this.tiles, 0, 0);
 
     this.anna = new CharacterSprite(this, 400, 400, 'anna', 26);
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -26,6 +36,12 @@ export default class OverworldScene extends Phaser.Scene {
       repeat: 11,
       setXY: { x: 12, y: 300, stepX: 70 },
     });
+    this.coins = this.physics.add.group({
+      key: 'coin',
+      repeat: 5,
+      setXY: { x: 12, y: 500, stepX: 100 },
+    });
+
     console.log('Keys', this.keys);
 
     this.anims.create({

@@ -24,7 +24,7 @@
          "columns":8,
          "firstgid":1,
          "image":"..\/..\/..\/..\/..\/tiles\/spooky-tileset.png",
-         "imageheight":151,
+         "imageheight":150,
          "imagewidth":400,
          "margin":0,
          "name":"spooky-tileset",

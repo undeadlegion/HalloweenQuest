@@ -13,8 +13,6 @@ export default class TitleScene extends Phaser.Scene {
   preload() {
     this.load.image('titlescreen', titleScreen);
     this.load.image('startbutton', startButton);
-    this.load.image('tiles', tilesAsset);
-    this.load.tilemapTiledJSON('map', mapAsset);
   }
 
   create() {
