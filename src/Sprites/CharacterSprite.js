@@ -41,6 +41,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityX(150);
       this.startBattle();
     }
+      //check if shift key is pressed
+      if (cursors.shift.isDown) {
+          this.showStatsWindow();
+      }
 
     if (this.body.velocity.x > 0) {
       this.play('right', true);
@@ -83,4 +87,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
           this.scene.events.emit('startBattle');
       }
   }
+    
+    showStatsWindow(){
+        //might be good to find a way not to fire this too many times
+        this.scene.events.emit('showStatsWindow');
+        
+    }
 }

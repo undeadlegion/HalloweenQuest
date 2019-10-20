@@ -133,9 +133,14 @@ export default class OverworldScene extends Phaser.Scene {
       }),
     });
 
-    // this.events.on('startBattle', () => {
-    //   this.scene.start('FightScene');
-    // });
+    this.events.on('startBattle', () => {
+      this.scene.start('FightScene');
+    });
+
+    this.events.on('showStatsWindow', () => {
+      this.scene.launch('StatsPopUp');
+      this.scene.pause();
+    });
   }
 
   update() {
