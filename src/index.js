@@ -1,13 +1,11 @@
 import 'phaser';
 import config from './config';
-import OverworldScene from './scenes/overworld';
-import TitleScene from './scenes/titlescreen';
-
-
+import OverworldScene from './Scenes/OverworldScene';
+import TitleScene from './Scenes/TitleScene';
 
 
 class Game extends Phaser.Game {
-  constructor () {
+  constructor() {
     super(config);
     this.scene.add('TitleScene', TitleScene);
     this.scene.add('OverworldScene', OverworldScene);

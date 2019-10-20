@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import tilesAsset from '../assets/tiles/cybernoid.png';
 import mapAsset from '../assets/maps/cybernoid.json';
-import titleScreen from '../assets/Title-page-temp-01.png';
-import startButton from '../assets/start-temp.png';
+import titleScreen from '../assets/title/title-page.png';
+import startButton from '../assets/title/start.png';
 
 
 export default class TitleScene extends Phaser.Scene {
