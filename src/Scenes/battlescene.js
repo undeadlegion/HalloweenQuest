@@ -33,7 +33,7 @@ preload(){
 }
  create() {
     //hard coded for testing
-     let currentEnemyImg = 'shyNosferatu';
+     let currentEnemyImg = this.selectRandomEnemy();
      let currentEnemy = enemies[currentEnemyImg]['name'];
      
      
@@ -128,6 +128,13 @@ preload(){
      }
      
      
+    }
+    
+    selectRandomEnemy(){
+        let keys = Object.keys(enemies);
+        let rand = Math.floor(Math.random() * keys.length);
+        //console.log(enemies[keys[rand]]);
+        return keys[rand];
     }
 
  update() {

@@ -27,17 +27,21 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (cursors.up.isDown) {
       this.direction = 'up';
       this.setVelocityY(-150);
+      this.startBattle();
     } else if (cursors.down.isDown) {
       this.direction = 'down';
       this.setVelocityY(150);
+      this.startBattle();
     }
     // check if the left or right key is pressed
     if (cursors.left.isDown) {
       this.direction = 'left';
       this.setVelocityX(-150);
+      this.startBattle();
     } else if (cursors.right.isDown) {
       this.direction = 'right';
       this.setVelocityX(150);
+      this.startBattle();
     }
 
     if (this.body.velocity.x > 0) {
@@ -73,5 +77,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         callbackScope: this,
       });
     }
+  }
+    
+    startBattle(){
+      let rand = Math.round(Math.random() * 1000);
+      if(rand == 3){
+          this.scene.events.emit('startBattle');
+      }
   }
 }

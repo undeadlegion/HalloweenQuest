@@ -76,6 +76,10 @@ export default class OverworldScene extends Phaser.Scene {
         end: 35,
       }),
     });
+      
+    this.events.on('startBattle', () => {
+      this.scene.start('FightScene');
+    });
   }
 
   update() {
@@ -95,4 +99,6 @@ export default class OverworldScene extends Phaser.Scene {
     console.log('Collected Key')
     key.disableBody(true, true);
   }
+    
+
 }
