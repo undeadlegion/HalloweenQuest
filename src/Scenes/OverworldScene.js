@@ -70,16 +70,16 @@ export default class OverworldScene extends Phaser.Scene {
 
     this.physics.add.collider(this.player, this.wallsLayer);
 
-    this.wallsLayer.renderDebug(this.add.graphics(), {
-      tileColor: null, // non-colliding tiles
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
-    });
-    this.baseLayer.renderDebug(this.add.graphics(), {
-      tileColor: null, // non-colliding tiles
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
-    });
+    // this.wallsLayer.renderDebug(this.add.graphics(), {
+    //   tileColor: null, // non-colliding tiles
+    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
+    // });
+    // this.baseLayer.renderDebug(this.add.graphics(), {
+    //   tileColor: null, // non-colliding tiles
+    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
+    // });
 
     // create star objects
     this.items = this.map.createFromObjects('objects', 'Star', { key: 'star' }).map((sprite) => {
