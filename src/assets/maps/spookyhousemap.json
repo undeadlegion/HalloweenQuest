@@ -51,20 +51,37 @@
                 {
                  "height":0,
                  "id":3,
-                 "name":"Cauldron with Boss key",
+                 "name":"Cauldron",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"Key",
+                         "type":"int",
+                         "value":2
+                        }],
                  "rotation":0,
                  "type":"star",
                  "visible":true,
                  "width":0,
-                 "x":232.909090909091,
-                 "y":432.36396969697
+                 "x":224.909090909091,
+                 "y":485.36396969697
                 }, 
                 {
                  "height":0,
                  "id":8,
-                 "name":"Boss door use boss key ",
+                 "name":"Door",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"Key ",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
+                         "name":"Locked",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -75,26 +92,32 @@
                 {
                  "height":0,
                  "id":17,
-                 "name":"Cauldron with weapon ",
+                 "name":"Cauldron",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":136.363636363636,
-                 "y":833.333333333333
+                 "x":176.393939393939,
+                 "y":787.060606060606
                 }, 
                 {
                  "height":0,
                  "id":18,
-                 "name":"Cauldron with key ",
+                 "name":"Cauldron",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"Key",
+                         "type":"int",
+                         "value":1
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1181.81818181818,
-                 "y":651.515151515152
+                 "x":1126.81818181818,
+                 "y":642.515151515152
                 }, 
                 {
                  "height":0,
@@ -105,14 +128,20 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":624.242424242424,
-                 "y":81.8181818181818
+                 "x":626.242424242424,
+                 "y":140.818181818182
                 }, 
                 {
                  "height":0,
                  "id":20,
-                 "name":"Open Door",
+                 "name":"Door",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"Open",
+                         "type":"bool",
+                         "value":false
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -123,8 +152,19 @@
                 {
                  "height":0,
                  "id":21,
-                 "name":"Locked door use key",
+                 "name":"Door",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"Key",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"Locked",
+                         "type":"bool",
+                         "value":true
+                        }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -135,38 +175,14 @@
                 {
                  "height":0,
                  "id":22,
-                 "name":"Player start",
+                 "name":"Start",
                  "point":true,
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":72.7272727272727,
-                 "y":1078.78787878788
-                }, 
-                {
-                 "height":0,
-                 "id":26,
-                 "name":"Cauldron with key",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":139.393939393939,
-                 "y":1066.66666666667
-                }, 
-                {
-                 "height":0,
-                 "id":27,
-                 "name":"",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1566.66666666667,
-                 "y":690.909090909091
+                 "x":174.727272727273,
+                 "y":1034.78787878788
                 }],
          "opacity":1,
          "type":"objectgroup",

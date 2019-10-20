@@ -6,12 +6,16 @@ import tilesAsset from '../assets/tiles/spooky-tileset.png';
 import mapAsset from '../assets/maps/spookyhousemap.json';
 import starAsset from '../assets/items/star.png';
 import coinAsset from '../assets/items/coin.png';
+import cauldronFullAsset from '../assets/items/cauldron-full.png';
+import cauldronEmptyAsset from '../assets/items/cauldron-empty.png';
 // import themeAudio from '../assets/audio/SpookyJam1.mp3';
 
 export default class OverworldScene extends Phaser.Scene {
   preload() {
     this.load.image('star', starAsset);
     this.load.image('coin', coinAsset);
+    this.load.image('cauldron-full', cauldronFullAsset);
+    this.load.image('cauldron-empty', cauldronEmptyAsset);
     this.load.spritesheet('anna', annaAsset, { frameWidth: 64, frameHeight: 64 });
 
     this.load.spritesheet('player', playerAsset, { frameWidth: 50, frameHeight: 50 });
@@ -32,7 +36,7 @@ export default class OverworldScene extends Phaser.Scene {
 
     // create the player
     this.map.findObject('objects', (obj) => {
-      if (obj.name === 'Player start') {
+      if (obj.name === 'Start') {
         console.log(obj);
         this.player = new CharacterSprite(this, obj.x, obj.y, 'player', 0);
         this.player.setCollideWorldBounds(true);
@@ -47,6 +51,7 @@ export default class OverworldScene extends Phaser.Scene {
     // create the controls
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
     // let music = this.sound.add('theme');
     // music.play();
@@ -85,18 +90,15 @@ export default class OverworldScene extends Phaser.Scene {
     });
     console.log('stars', this.items);
 
-    // this.map.findObject('Player', (obj) => {
-    //     console.log(obj);
-    //   if (this._NEWGAME && this._LEVEL === 1) {
-    //     if (obj.type === 'StartingPosition') {
-    //       this.player = new Player(this, obj.x, obj.y);
-    //     }
-    //   } else {
-    //     if (obj.type === 'StartingPositionPortal') {
-    //       this.player = new Player(this, obj.x, obj.y);
-    //     }
-    //   }
-    // });
+    // create cauldrons
+    this.cauldrons = this.map.createFromObjects('objects', 'Cauldron', { key: 'cauldron-full' }).map((sprite) => {
+      sprite.setScale(1);
+      sprite.setDepth(2);
+      this.physics.world.enableBody(sprite);
+      return sprite;
+    });
+    this.collectedKeys = [];
+    // this.physics.add.collider(this.player, this.cauldrons);
 
     this.anims.create({
       key: 'down',
@@ -138,6 +140,17 @@ export default class OverworldScene extends Phaser.Scene {
 
   update() {
     this.player.update(this.cursors);
+
+    if (Phaser.Input.Keyboard.JustDown(this.aKey)) {
+      this.cauldrons.forEach((cauldron) => {
+        if (this.physics.world.intersects(this.player.body, cauldron.body)) {
+          cauldron.setTexture('cauldron-empty');
+          // get the key number property
+          // console.log(cauldron);
+          // this.collectedKeys.append[keyNumber];
+        }
+      });
+    }
 
     // pick up keys
     if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
