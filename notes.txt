@@ -1,0 +1,7 @@
+Close stats box
+Delay between attacks
+Enemy HP not updating
+Music
+check position and scale of new enemies
+
+ECECEC - attack screen hex code
