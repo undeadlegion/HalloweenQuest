@@ -1,8 +1,8 @@
-import 'phaser';
+import Phaser from 'phaser';
 import config from './config';
 import OverworldScene from './Scenes/OverworldScene';
 import TitleScene from './Scenes/TitleScene';
-import FightScene from './scenes/battlescene';
+import FightScene from './Scenes/BattleScene';
 
 
 class Game extends Phaser.Game {
@@ -14,5 +14,5 @@ class Game extends Phaser.Game {
     this.scene.start('TitleScene');
   }
 }
- 
+
 window.game = new Game();
