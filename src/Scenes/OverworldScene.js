@@ -44,19 +44,20 @@ export default class OverworldScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.wallsLayer);
     this.wallsLayer.setCollisionByExclusion(-1);
 
-    this.wallsLayer.renderDebug(this.add.graphics(), {
-      tileColor: null, // non-colliding tiles
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
-    });
+    // this.wallsLayer.renderDebug(this.add.graphics(), {
+    //   tileColor: null, // non-colliding tiles
+    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
+    // });
 
     // create star objects
-    let items = this.map.createFromObjects('objects', 'Star', { key: 'star' }).map((sprite) => {
-      sprite.setScale(2);
-      sprite.setInteractive();
+    this.items = this.map.createFromObjects('objects', 'Star', { key: 'star' }).map((sprite) => {
+      sprite.setScale(1);
+      sprite.setDepth(1);
+      this.physics.world.enableBody(sprite);
       return sprite;
     });
-    console.log('stars', items);
+    console.log('stars', this.items);
 
     this.anims.create({
       key: 'down',
@@ -101,11 +102,18 @@ export default class OverworldScene extends Phaser.Scene {
 
     // pick up keys
     if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
-      this.keys.children.entries.forEach((key) => {
-        if (this.physics.world.intersects(this.player.body, key.body)) {
-          key.disableBody(true, true);
+
+      console.log('items', this.items);
+      this.items.forEach((item) => {
+        if (this.physics.world.intersects(this.player.body, item.body)) {
+          item.destroy();
         }
       });
+      // this.keys.children.entries.forEach((key) => {
+      //   if (this.physics.world.intersects(this.player.body, key.body)) {
+      //     key.disableBody(true, true);
+      //   }
+      // });
     }
   }
 
