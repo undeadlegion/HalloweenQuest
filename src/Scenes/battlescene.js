@@ -19,6 +19,7 @@ export default class FightScene extends Phaser.Scene {
 
 preload(){
     this.load.image('fightscene', fightScene);
+    this.load.image('playerSprite', playerSprite);
     this.load.image('trollCauldron', trollCauldron);
     this.load.image('jak_n_box', jak_n_box);
     this.load.image('schoolBully', schoolBully);
@@ -28,6 +29,7 @@ preload(){
     this.load.image('defend', defend);
     this.load.image('magic', magic);
     this.load.image('runbtn', runbtn);
+    
 }
  create() {
     //hard coded for testing
@@ -37,10 +39,10 @@ preload(){
      
      
      this.add.image(0,0,'fightscene').setOrigin(0);
-     let enemySprite = this.add.sprite(350, enemies[currentEnemyImg]['ypos'], currentEnemyImg).setOrigin(0);
+     let enemySprite = this.add.sprite(350 + enemies[currentEnemyImg]['xpos'], enemies[currentEnemyImg]['ypos'], currentEnemyImg).setOrigin(0);
      enemySprite.setScale(enemies[currentEnemyImg]['scale']);
-     let playerSprite = this.add.sprite(50,400,'playerSprite').setOrigin(0);
-     playerSprite.setScale(2);
+     let playerSprite = this.add.sprite(50,300,'playerSprite').setOrigin(0);
+     playerSprite.setScale(1);
      
      let graphics = this.add.graphics();
      
