@@ -106,7 +106,7 @@ export default class OverworldScene extends Phaser.Scene {
       console.log('items', this.items);
       this.items.forEach((item) => {
         if (this.physics.world.intersects(this.player.body, item.body)) {
-          item.destroy();
+          item.setActive(false).setVisible(false);
         }
       });
       // this.keys.children.entries.forEach((key) => {
