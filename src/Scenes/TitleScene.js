@@ -63,7 +63,7 @@ export default class TitleScene extends Phaser.Scene {
 
     startBtn.setInteractive();
     startBtn.on('pointerup', () => {
-      this.scene.start('FightScene');
+      this.scene.start('OverworldScene');
     });
   }
 
