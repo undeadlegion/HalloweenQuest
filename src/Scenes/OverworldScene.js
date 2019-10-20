@@ -19,30 +19,43 @@ export default class OverworldScene extends Phaser.Scene {
   create() {
     this.map = this.make.tilemap({ key: 'map' });
     this.tiles = this.map.addTilesetImage('spooky-tileset', 'spooky-tileset');
-    this.layer = this.map.createStaticLayer(0, this.tiles, 0, 0);
-    // this.backgroundLayer = this.map.createStaticLayer(0, this.tiles, 0, 0);
-    // this.doorsLayer = this.map.createStaticLayer(0, this.tiles, 0, 0);
-    // this.playerLayer = this.map.createStaticLayer(0, this.tiles, 0, 0);
+    this.baseLayer = this.map.createStaticLayer('base', this.tiles, 0, 0);
+    this.wallsLayer = this.map.createStaticLayer('walls', this.tiles, 0, 0);
 
     this.anna = new CharacterSprite(this, 400, 400, 'anna', 26);
+    // this.anna.setSize(50, 50);
+    // this.anna.setSize(40, 50).setOffset(10, 10);
+    this.anna.setCollideWorldBounds(true);
+
     this.cursors = this.input.keyboard.createCursorKeys();
     this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     this.cameras.main.startFollow(this.anna);
     this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
-    this.keys = this.physics.add.group({
-      key: 'star',
-      repeat: 11,
-      setXY: { x: 12, y: 300, stepX: 70 },
-    });
-    this.coins = this.physics.add.group({
-      key: 'coin',
-      repeat: 5,
-      setXY: { x: 12, y: 500, stepX: 100 },
+    // this.keys = this.physics.add.group({
+    //   key: 'star',
+    //   repeat: 11,
+    //   setXY: { x: 12, y: 300, stepX: 70 },
+    // });
+    // console.log('Keys', this.keys);
+
+    this.physics.add.collider(this.anna, this.wallsLayer);
+    this.wallsLayer.setCollisionByExclusion(-1);
+
+    this.wallsLayer.renderDebug(this.add.graphics(), {
+      tileColor: null, // non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
     });
 
-    console.log('Keys', this.keys);
+    // create star objects
+    let items = this.map.createFromObjects('objects', 'Star', { key: 'star' }).map((sprite) => {
+      sprite.setScale(2);
+      sprite.setInteractive();
+      return sprite;
+    });
+    console.log('stars', items);
 
     this.anims.create({
       key: 'left',
@@ -76,7 +89,7 @@ export default class OverworldScene extends Phaser.Scene {
         end: 35,
       }),
     });
-      
+
     this.events.on('startBattle', () => {
       this.scene.start('FightScene');
     });
