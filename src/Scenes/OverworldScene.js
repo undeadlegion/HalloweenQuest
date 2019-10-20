@@ -6,6 +6,7 @@ import tilesAsset from '../assets/tiles/spooky-tileset.png';
 import mapAsset from '../assets/maps/spookyhousemap.json';
 import starAsset from '../assets/items/star.png';
 import coinAsset from '../assets/items/coin.png';
+// import themeAudio from '../assets/audio/SpookyJam1.mp3';
 
 export default class OverworldScene extends Phaser.Scene {
   preload() {
@@ -17,23 +18,38 @@ export default class OverworldScene extends Phaser.Scene {
 
     this.load.image('spooky-tileset', tilesAsset);
     this.load.tilemapTiledJSON('map', mapAsset);
+
+    // this.load.audio('theme', [themeAudio]);
   }
 
   create() {
+    // create the map
     this.map = this.make.tilemap({ key: 'map' });
     this.tiles = this.map.addTilesetImage('spooky-tileset', 'spooky-tileset');
-    this.baseLayer = this.map.createStaticLayer('base', this.tiles, 0, 0);
-    this.wallsLayer = this.map.createStaticLayer('walls', this.tiles, 0, 0);
+    this.baseLayer = this.map.createStaticLayer('base', [this.tiles], 0, 0);
+    this.wallsLayer = this.map.createStaticLayer('walls', [this.tiles], 0, 0);
 
-    this.player = new CharacterSprite(this, 400, 400, 'player', 0);
-    this.player.setCollideWorldBounds(true);
 
-    this.cursors = this.input.keyboard.createCursorKeys();
-    this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    // create the player
+    this.map.findObject('objects', (obj) => {
+      if (obj.name === 'Player start') {
+        console.log(obj);
+        this.player = new CharacterSprite(this, obj.x, obj.y, 'player', 0);
+        this.player.setCollideWorldBounds(true);
+      }
+    });
 
+    // create the camera
     this.cameras.main.startFollow(this.player);
     this.physics.world.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
 
+
+    // create the controls
+    this.cursors = this.input.keyboard.createCursorKeys();
+    this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    // let music = this.sound.add('theme');
+    // music.play();
     // this.keys = this.physics.add.group({
     //   key: 'star',
     //   repeat: 11,
@@ -41,14 +57,24 @@ export default class OverworldScene extends Phaser.Scene {
     // });
     // console.log('Keys', this.keys);
 
-    this.physics.add.collider(this.player, this.wallsLayer);
-    this.wallsLayer.setCollisionByExclusion(-1);
+    // doors == 5,6,7,10
+    this.wallsLayer.setCollision([1, 2, 3, 4, 8, 9, 12, 14, 15, 16, 17, 18, 19]);
 
-    // this.wallsLayer.renderDebug(this.add.graphics(), {
-    //   tileColor: null, // non-colliding tiles
-    //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
-    //   faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
-    // });
+    // open doors
+    this.wallsLayer.setCollision([5, 6, 7, 10], false);
+
+    this.physics.add.collider(this.player, this.wallsLayer);
+
+    this.wallsLayer.renderDebug(this.add.graphics(), {
+      tileColor: null, // non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
+    });
+    this.baseLayer.renderDebug(this.add.graphics(), {
+      tileColor: null, // non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles,
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
+    });
 
     // create star objects
     this.items = this.map.createFromObjects('objects', 'Star', { key: 'star' }).map((sprite) => {
@@ -58,6 +84,19 @@ export default class OverworldScene extends Phaser.Scene {
       return sprite;
     });
     console.log('stars', this.items);
+
+    // this.map.findObject('Player', (obj) => {
+    //     console.log(obj);
+    //   if (this._NEWGAME && this._LEVEL === 1) {
+    //     if (obj.type === 'StartingPosition') {
+    //       this.player = new Player(this, obj.x, obj.y);
+    //     }
+    //   } else {
+    //     if (obj.type === 'StartingPositionPortal') {
+    //       this.player = new Player(this, obj.x, obj.y);
+    //     }
+    //   }
+    // });
 
     this.anims.create({
       key: 'down',
@@ -92,9 +131,9 @@ export default class OverworldScene extends Phaser.Scene {
       }),
     });
 
-    this.events.on('startBattle', () => {
-      this.scene.start('FightScene');
-    });
+    // this.events.on('startBattle', () => {
+    //   this.scene.start('FightScene');
+    // });
   }
 
   update() {
@@ -102,8 +141,6 @@ export default class OverworldScene extends Phaser.Scene {
 
     // pick up keys
     if (Phaser.Input.Keyboard.JustDown(this.spaceKey)) {
-
-      console.log('items', this.items);
       this.items.forEach((item) => {
         if (this.physics.world.intersects(this.player.body, item.body)) {
           item.setActive(false).setVisible(false);
