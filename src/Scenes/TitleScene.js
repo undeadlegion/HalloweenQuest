@@ -78,6 +78,6 @@ export default class TitleScene extends Phaser.Scene {
     if (this.textbox.y === -50) {
       this.textbox.y = 550;
     }
-  }    
+  }
 // end of class
 }
