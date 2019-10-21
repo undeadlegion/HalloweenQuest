@@ -8,7 +8,10 @@ import starAsset from '../assets/items/star.png';
 import coinAsset from '../assets/items/coin.png';
 import cauldronFullAsset from '../assets/items/cauldron-full.png';
 import cauldronEmptyAsset from '../assets/items/cauldron-empty.png';
-// import themeAudio from '../assets/audio/SpookyJam1.mp3';
+
+// import WebpackLoader from 'phaser-webpack-loader';
+// import AssetManifest from '../assets/AssetManifest';
+import themeAudio from '../assets/audio/SpookyJam1.wav';
 
 export default class OverworldScene extends Phaser.Scene {
   preload() {
@@ -23,7 +26,9 @@ export default class OverworldScene extends Phaser.Scene {
     this.load.image('spooky-tileset', tilesAsset);
     this.load.tilemapTiledJSON('map', mapAsset);
 
-    // this.load.audio('theme', [themeAudio]);
+    this.load.audio('theme', themeAudio);
+    // this.load.scenePlugin('WebpackLoader', WebpackLoader, 'loader', 'loader');
+    // this.load.audio('theme', ['assets/audio/SpookyJam1.wav']);
   }
 
   create() {
@@ -38,7 +43,7 @@ export default class OverworldScene extends Phaser.Scene {
     this.map.findObject('objects', (obj) => {
       if (obj.name === 'Start') {
         console.log(obj);
-        this.player = new CharacterSprite(this, obj.x, obj.y, 'player', 0);
+        this.player = new CharacterSprite(this, obj.x, obj.y, 'player');
         this.player.setCollideWorldBounds(true);
       }
     });
@@ -53,8 +58,6 @@ export default class OverworldScene extends Phaser.Scene {
     this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     this.aKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 
-    // let music = this.sound.add('theme');
-    // music.play();
     // this.keys = this.physics.add.group({
     //   key: 'star',
     //   repeat: 11,
@@ -141,6 +144,15 @@ export default class OverworldScene extends Phaser.Scene {
       this.scene.launch('StatsPopUp');
       this.scene.pause();
     });
+
+    // play the music
+    const music = this.sound.add('theme');
+    music.play();
+    // this.loader.start(AssetManifest);
+    // this.loader.load().then(() => {
+    //   const music = this.sound.add('SpookyJam1.wav');
+    //   music.play();
+    // });
   }
 
   update() {
