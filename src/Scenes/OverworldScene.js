@@ -45,6 +45,7 @@ export default class OverworldScene extends Phaser.Scene {
         console.log(obj);
         this.player = new CharacterSprite(this, obj.x, obj.y, 'player');
         this.player.setCollideWorldBounds(true);
+        this.createPlayerAnimations();
       }
     });
 
@@ -103,39 +104,6 @@ export default class OverworldScene extends Phaser.Scene {
     this.collectedKeys = [];
     // this.physics.add.collider(this.player, this.cauldrons);
 
-    this.anims.create({
-      key: 'down',
-      frameRate: 10,
-      frames: this.anims.generateFrameNumbers('player', {
-        start: 0,
-        end: 3,
-      }),
-    });
-    this.anims.create({
-      key: 'right',
-      frameRate: 10,
-      frames: this.anims.generateFrameNumbers('player', {
-        start: 4,
-        end: 7,
-      }),
-    });
-    this.anims.create({
-      key: 'left',
-      frameRate: 10,
-      frames: this.anims.generateFrameNumbers('player', {
-        start: 8,
-        end: 11,
-      }),
-    });
-    this.anims.create({
-      key: 'up',
-      frameRate: 10,
-      frames: this.anims.generateFrameNumbers('player', {
-        start: 12,
-        end: 15,
-      }),
-    });
-
     this.events.on('startBattle', () => {
       this.scene.start('FightScene');
     });
@@ -182,6 +150,41 @@ export default class OverworldScene extends Phaser.Scene {
       //   }
       // });
     }
+  }
+
+  createPlayerAnimations() {
+    this.anims.create({
+      key: 'down',
+      frameRate: 10,
+      frames: this.anims.generateFrameNumbers('player', {
+        start: 0,
+        end: 3,
+      }),
+    });
+    this.anims.create({
+      key: 'right',
+      frameRate: 10,
+      frames: this.anims.generateFrameNumbers('player', {
+        start: 4,
+        end: 7,
+      }),
+    });
+    this.anims.create({
+      key: 'left',
+      frameRate: 10,
+      frames: this.anims.generateFrameNumbers('player', {
+        start: 8,
+        end: 11,
+      }),
+    });
+    this.anims.create({
+      key: 'up',
+      frameRate: 10,
+      frames: this.anims.generateFrameNumbers('player', {
+        start: 12,
+        end: 15,
+      }),
+    });
   }
 
   collectKey(player, key) {
