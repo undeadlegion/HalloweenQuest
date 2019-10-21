@@ -29,13 +29,16 @@ module.exports = {
       }
     ]
   },
+  output: {
+    path: path.resolve(__dirname, "../docs")
+  },
   resolve: {
     alias: {
       assets: path.join(__dirname, '../src/assets'),
     },
   },
   plugins: [
-    new CleanWebpackPlugin(["dist"], {
+    new CleanWebpackPlugin(["docs"], {
       root: path.resolve(__dirname, "../")
     }),
     new webpack.DefinePlugin({
