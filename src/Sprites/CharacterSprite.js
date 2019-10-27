@@ -19,6 +19,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.setDepth(2);
     this.body.collideWorldBounds = true;
+      
+    this.keySensor = 0;
+    
   }
 
   update(cursors) {
@@ -43,10 +46,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityX(150);
       this.startBattle();
     }
-      //check if shift key is pressed
-      if (cursors.shift.isDown) {
+    
+      if(cursors.shift.isUp && this.keySensor==1){
           this.showStatsWindow();
+          this.keySensor = 0;
       }
+      if(cursors.shift.isDown){
+          this.keySensor = 1
+      }
+
 
     if (this.body.velocity.x > 0) {
       this.play('right', true);
@@ -57,6 +65,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     } else if (this.body.velocity.y > 0) {
       this.play('down', true);
     }
+      
+    
   }
 
   loseHealth() {
@@ -91,8 +101,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
     
     showStatsWindow(){
-        //might be good to find a way not to fire this too many times
         this.scene.events.emit('showStatsWindow');
-        
+       
+            
     }
 }

@@ -109,6 +109,7 @@ export default class OverworldScene extends Phaser.Scene {
     });
 
     this.events.on('showStatsWindow', () => {
+        
       this.scene.launch('StatsPopUp');
       this.scene.pause();
     });

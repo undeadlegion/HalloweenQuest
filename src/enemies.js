@@ -20,9 +20,9 @@ export default {
     "bedSheetGhost": {
         "name": "Bed Sheet Ghost",
         "probability": 0.15,
-        "scale": 0.3,
-        "xpos": 0,
-        "ypos": 100,
+        "scale": 0.18,
+        "xpos": 70,
+        "ypos": -10,
         "HP": 24,
         "MP": 15,
         "Attack": 8,

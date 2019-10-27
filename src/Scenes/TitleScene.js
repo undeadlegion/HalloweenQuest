@@ -3,6 +3,9 @@ import tilesAsset from '../assets/tiles/cybernoid.png';
 import mapAsset from '../assets/maps/cybernoid.json';
 import titleScreen from '../assets/title/title-page.png';
 import startButton from '../assets/title/start.png';
+//audio not working
+//import spookyJam1 from '../assets/audio/GTFO.mp3';
+
 
 
 export default class TitleScene extends Phaser.Scene {
@@ -13,9 +16,15 @@ export default class TitleScene extends Phaser.Scene {
   preload() {
     this.load.image('titlescreen', titleScreen);
     this.load.image('startbutton', startButton);
+    //audio not working
+    //this.load.audio('spookyjam1', [spookyJam1]);
   }
 
   create() {
+      //audio not working
+      //let music = new Sound(game, 'spookyjam1', 1, true);
+
+    //music.play();
     const story_text = [
       'Once upon a time, in a town not too different from your',
       'own, there was a special festival called Halloween.',
