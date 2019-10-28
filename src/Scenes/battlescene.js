@@ -34,6 +34,7 @@ export default class FightScene extends Phaser.Scene {
      this.pWeapon = game.playerStats["WEAPON"];
      this.pSpeed = game.playerStats["SPEED"];
       
+
       
   }
     
@@ -77,8 +78,8 @@ preload(){
      this.add.image(0,0,'fightscene').setOrigin(0);
      let enemySprite = this.add.sprite(350 + game.enemies[this.currEnemy]['xpos'], game.enemies[this.currEnemy]['ypos'], this.currEnemy).setOrigin(0);
      enemySprite.setScale(game.enemies[this.currEnemy]['scale']);
-     let playerSprite = this.add.sprite(50,300,'playerSprite').setOrigin(0);
-     playerSprite.setScale(2.5);
+     let player = this.add.sprite(50,300,'playerSprite').setOrigin(0);
+     player.setScale(2.5);
      
      let graphics = this.add.graphics();
      
@@ -290,6 +291,7 @@ preload(){
         this.add.text(220, 220, "Player", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
         this.add.text(220, 260, "Attacks", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
 
+        this.cameras.main.shake(200, 0.02);
         let dam = this.pAttack + this.pWeapon - this.eDefense;
         if(dam < 1){ dam = 1;}
         if(dam > this.eHP){ dam = this.eHP;}
@@ -316,6 +318,7 @@ preload(){
         this.add.text(220, 220, "Enemy", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
         this.add.text(220, 260, "Attacks", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
 
+        this.cameras.main.shake(200, 0.02);
         let dam = this.eAttack - this.pDefense;
         if(dam < 1){ dam = 1;}
         if(dam > this.pHP){ dam = this.pHP;}
