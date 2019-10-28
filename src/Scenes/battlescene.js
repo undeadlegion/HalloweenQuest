@@ -34,7 +34,7 @@ export default class FightScene extends Phaser.Scene {
      this.pWeapon = game.playerStats["WEAPON"];
      this.pSpeed = game.playerStats["SPEED"];
       
-
+     this.turn = 0;
       
   }
     
@@ -144,8 +144,25 @@ preload(){
 
      this.showPlayerStats();
      this.showEnemyStats();
+     this.showNoBattle();
      
      //end of create function
+    }
+    
+    showNoBattle(){
+        //reset the turn variable
+        this.turn = 0;
+        
+        //before or after each battle, show a message
+        let graphics = this.add.graphics();
+
+        graphics.fillStyle(0xffffff);
+        graphics.fillRoundedRect(200,200,170,100,15);
+        graphics.lineStyle(5,0x000000);
+        graphics.strokeRoundedRect(200,200,170,100,15);
+        this.add.text(230, 220, "CHOOSE", { fontFamily: 'Courier New', fontSize: '19pt', color: '#000000'});
+        this.add.text(220, 250, "AN ACTION", { fontFamily: 'Courier New', fontSize: '19pt', color: '#000000'});
+
     }
     
      showPlayerStats(){
@@ -201,18 +218,23 @@ preload(){
         //LATER - make a tie random, currently tie goes to player
         
         if(this.pSpeed >= this.eSpeed){
+            
             //player goes first
+            this.turn = 1;
             this.doEnemyDamage();
             
             //then enemy
+            this.turn = 2;
             let timer = this.time.delayedCall(3000, this.doPlayerDamage, [], this);  
             //this.doPlayerDamage(pHP, eAttack, pDefense);
             
         } else if (this.pSpeed < this.eSpeed){
             //enemy goes first
+            this.turn = 1;
             this.doPlayerDamage();
             
             //then player
+            this.turn = 2;
             let timer = this.time.delayedCall(3000, this.doEnemyDamage, [], this);
             //this.doEnemyDamage();
         } 
@@ -304,6 +326,11 @@ preload(){
         //update screen
         this.showPlayerStats();
         this.showEnemyStats();
+        
+        // reset if this was the second turn
+        if (this.turn == 2){
+            let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
+        }
     }
     
     doPlayerDamage(){
@@ -332,6 +359,11 @@ preload(){
         
         if(this.pHP == 0){
             let timer = this.time.delayedCall(1000, this.gameOver, [], this);  
+        }
+        
+        // reset if this was the second turn
+        if (this.turn == 2){
+            let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
         }
     }
     
