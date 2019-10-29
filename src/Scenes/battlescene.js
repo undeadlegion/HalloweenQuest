@@ -199,10 +199,17 @@ preload(){
     }
     
     selectRandomEnemy(){
-        let keys = Object.keys(game.enemies);
-        let rand = Math.floor(Math.random() * keys.length);
-        //console.log(enemies[keys[rand]]);
-        return keys[rand];
+        let rand = Math.random();
+        //console.log(rand);
+        var counter = 0.0;
+        for(let enemy in game.enemies){
+            //console.log(enemy + ": " + game.enemies[enemy]["probability"]);
+            counter += game.enemies[enemy]["probability"];
+            //console.log(counter);
+            if (counter > rand){
+                return enemy;
+            }
+        }
     }
     
     
