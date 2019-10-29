@@ -221,10 +221,26 @@ preload(){
         console.log(game.enemies[this.currEnemy]);
         
         
-        //figure out who goes first, then calculate damage
-        //LATER - make a tie random, currently tie goes to player
+        //figure out who goes first
+        let firstmove;
+        if(this.pSpeed > this.eSpeed){
+            firstmove = "player";
+        }
+        else if (this.pSpeed < this.eSpeed){
+            firstmove = "enemy";
+        }
+        else {
+            //if there is a tie, make it random
+            let r = Math.random();
+            if (r<0.5){
+                firstmove = "player";
+            } else{
+                firstmove = "enemy";
+            }
+        }
         
-        if(this.pSpeed >= this.eSpeed){
+        //execute the turns in correct order
+        if(firstmove == "player"){
             
             //player goes first
             this.turn = 1;
@@ -235,7 +251,7 @@ preload(){
             let timer = this.time.delayedCall(3000, this.doPlayerDamage, [], this);  
             //this.doPlayerDamage(pHP, eAttack, pDefense);
             
-        } else if (this.pSpeed < this.eSpeed){
+        } else if (firstmove == "enemy"){
             //enemy goes first
             this.turn = 1;
             this.doPlayerDamage();
@@ -334,6 +350,11 @@ preload(){
         this.showPlayerStats();
         this.showEnemyStats();
         
+        //handle enemy defeat
+        if(this.eHP == 0){
+            let timer = this.time.delayedCall(1000, this.enemyDefeated, [], this);  
+        }
+        
         // reset if this was the second turn
         if (this.turn == 2){
             let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
@@ -372,6 +393,28 @@ preload(){
         if (this.turn == 2){
             let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
         }
+    }
+    
+    enemyDefeated(){
+        //adjust stats
+        
+        //on screen feedback
+        
+        let graphics = this.add.graphics();
+
+
+        graphics.fillStyle(0xffffff);
+        graphics.fillRoundedRect(200,200,170,100,15);
+        graphics.lineStyle(5,0x000000);
+        graphics.strokeRoundedRect(200,200,170,100,15);
+        this.add.text(220, 220, "Enemy", { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000'});
+        this.add.text(220, 250, "Defeated", { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000'});
+
+        let timer = this.time.delayedCall(1000, this.returnToOverworld, [], this); 
+    }
+    
+    returnToOverworld(){
+        this.scene.start('OverworldScene');
     }
     
     gameOver(){
