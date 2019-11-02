@@ -29,9 +29,11 @@ export default class CharacterStatsScene extends Phaser.Scene {
     let ypos = 100;
     for(var mykey in playerStats){
         //console.log(mykey);
-        this.add.text(50, ypos, mykey, { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
-        this.add.text(180, ypos, playerStats[mykey], { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
-        ypos += 25;
+        if(mykey != "MAGIC"){
+            this.add.text(50, ypos, mykey, { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
+            this.add.text(180, ypos, playerStats[mykey], { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
+            ypos += 25;
+        }
     }
       
     let keyObj = this.input.keyboard.addKey('shift');

@@ -39,5 +39,31 @@ export default {
     "MG ATK": 8,
     "MG DEF": 7,
     "SPEED": 10,
-    "WEAPON": 0
+    "WEAPON": 0,
+    "MAGIC": {
+        "HEAL": {
+            "Level": 1,
+            "MP used": 2
+        },
+        "FIREBALL": {
+            "Level": 2,
+            "MP used": 2
+        },
+        "BULK": {
+            "Level": 4,
+            "MP used": 4
+        },
+        "BUFF": {
+            "Level": 6,
+            "MP used": 4
+        },
+        "CHARGE": {
+            "Level": 8,
+            "MP used": 6
+        },
+        "TRICKORTREAT": {
+            "Level": 10,
+            "MP used": 10
+        }
+    }
 }

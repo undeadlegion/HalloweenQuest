@@ -15,7 +15,8 @@ export default {
         "Defense": 15,
         "Magic Attack": 20,
         "Magic Defense": 18,
-        "Speed": 18
+        "Speed": 18,
+        "EXP given": 4
     },
     "bedSheetGhost": {
         "name": "Bed Sheet Ghost",
@@ -29,7 +30,8 @@ export default {
         "Defense": 10,
         "Magic Attack": 19,
         "Magic Defense": 15,
-        "Speed": 15
+        "Speed": 15,
+        "EXP given": 4
     },
     "unsureFranky": {
         "name": "Unsure Franky",
@@ -43,7 +45,8 @@ export default {
         "Defense": 12,
         "Magic Attack": 0,
         "Magic Defense": 8,
-        "Speed": 14
+        "Speed": 14,
+        "EXP given": 4
     },
     "jak_n_box": {
         "name": "Jak N Box",
@@ -57,7 +60,8 @@ export default {
         "Defense": 15,
         "Magic Attack": 9,
         "Magic Defense": 12,
-        "Speed": 17
+        "Speed": 17,
+        "EXP given": 4
     },
     "schoolBully": {
         "name": "School Bully",
@@ -71,7 +75,8 @@ export default {
         "Defense": 22,
         "Magic Attack": 0,
         "Magic Defense": 21,
-        "Speed": 24
+        "Speed": 24,
+        "EXP given": 10
     },
     "shadowBeast": {
         "name": "Shadow Beast",
@@ -85,7 +90,8 @@ export default {
         "Defense": 12,
         "Magic Attack": 30,
         "Magic Defense": 25,
-        "Speed": 22
+        "Speed": 22,
+        "EXP given": 8
     },
     "shyNosferatu": {
         "name": "Shy Nosferatu",
@@ -99,7 +105,8 @@ export default {
         "Defense": 5,
         "Magic Attack": 13,
         "Magic Defense": 5,
-        "Speed": 9
+        "Speed": 9,
+        "EXP given": 3
     },
     "trollCauldron": {
         "name": "Troll Cauldron",
@@ -113,6 +120,7 @@ export default {
         "Defense": 7,
         "Magic Attack": 0,
         "Magic Defense": 0,
-        "Speed": 8
+        "Speed": 8,
+        "EXP given": 3
     }
 }

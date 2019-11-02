@@ -25,28 +25,37 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
     }
     
     
-  create(){
-      let xpos = 420;
-      let ypos = 360;        
-    let graphics = this.add.graphics();
+    create(){
+        let xpos = 420;
+        let ypos = 360; 
+        
+        let graphics = this.add.graphics();
 
-     
-     graphics.fillStyle(0x0000ff);
-     graphics.fillRoundedRect(xpos-10,ypos-40,250,50,15);
-     graphics.lineStyle(5,0x0000ff);
-     graphics.strokeRoundedRect(xpos-10,ypos-40,250,50,15);
-     graphics.fillStyle(0xffffff);
-     graphics.fillRoundedRect(xpos-30,ypos-10,360,220,15);
-     graphics.lineStyle(5,0x0000ff);
-     graphics.strokeRoundedRect(xpos-30,ypos-10,360,220,15);
+        //draw the menu outline
+        graphics.fillStyle(0x0000ff);
+        graphics.fillRoundedRect(xpos-10,ypos-40,250,50,15);
+        graphics.lineStyle(5,0x0000ff);
+        graphics.strokeRoundedRect(xpos-10,ypos-40,250,50,15);
+        graphics.fillStyle(0xffffff);
+        graphics.fillRoundedRect(xpos-30,ypos-10,360,220,15);
+        graphics.lineStyle(5,0x0000ff);
+        graphics.strokeRoundedRect(xpos-30,ypos-10,360,220,15);
     
-    this.add.text(xpos+80, ypos-36, "MAGIC", { fontFamily: 'Courier New', fontSize: '18pt', color: '#ffffff'});
+        this.add.text(xpos+80, ypos-36, "MAGIC", { fontFamily: 'Courier New', fontSize: '18pt', color: '#ffffff'});
     
 
       
       
        //magic action buttons
      
+     let btnHeal = this.add.image(xpos, ypos + 20, 'healbtn').setOrigin(0);
+     btnHeal.setScale(0.4);
+     btnHeal.setInteractive();
+     btnHeal.on('pointerup', () => {
+         console.log("Heal button");
+         this.doSpell('HEAL');
+     });
+      
      let btnBuff = this.add.image(xpos + 170, ypos + 20, 'buffbtn').setOrigin(0);
      btnBuff.setScale(0.4);
      btnBuff.setInteractive();
@@ -76,12 +85,7 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
          console.log("Fireball button");
      });
 
-     let btnHeal = this.add.image(xpos, ypos + 20, 'healbtn').setOrigin(0);
-     btnHeal.setScale(0.4);
-     btnHeal.setInteractive();
-     btnHeal.on('pointerup', () => {
-         console.log("Heal button");
-     });
+
       
      let btnTrickorTreat = this.add.image(xpos + 170, ypos + 147, 'trickortreatbtn').setOrigin(0);
      btnTrickorTreat.setScale(0.4);
@@ -105,6 +109,36 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
         });
     }
 
+    doSpell(spell){
+        
+        let spellLevel = game.playerStats["MAGIC"][spell]["Level"];
+        let spellCost = game.playerStats["MAGIC"][spell]["MP used"];
+        let MP = game.playerStats["MP"];
+        let pLevel = game.playerStats["LVL"];
 
+        //first, check that spell is available
+        if(spellLevel <= pLevel){
+            //now check that sufficient MP are available
+            if(spellCost <= MP){
+                //do the spell
+                console.log("Do spell: " + spell);
+                if(spell == "HEAL"){
+                    game.playerStats["HP"] += pLevel * 5;
+                    //max HP is determined by your levels
+                    if (game.playerStats["HP"] > pLevel * 10){
+                        game.playerStats["HP"] = pLevel * 10;
+                    }
+                    game.playerStats["MP"] -= spellCost;
+                    console.log("Player Stats");
+                    console.log(game.playerStats);
+                    this.events.emit('updatePlayerStats');
+                    game.scene.resume('FightScene');
+                    game.scene.stop('MagicBattleMenu');
+                }
+            }
+        }
+        
+        
+    }
     //end of class
 }
