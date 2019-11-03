@@ -202,33 +202,45 @@ preload(){
          
         let graphics = this.add.graphics();
         //show current player stats
-
+         
+         
+         //updated 11/2/19 to use LVL max as denominator rather than 100
+         //this makes the full space on the health bar used
         let playerHP = game.playerStats["HP"]; 
+        let maxHP = game.playerStats["LVL"] * 10;  //e.g. maxHP at level 3 is 30
+        const healthBarScale = 250;  //total number of pixels in the health bar
+        let ratio = healthBarScale / maxHP;  //this is how many pixels per HP
 
         graphics.fillStyle(0x00ba0c);
-        graphics.fillRect(this.stats_xpos + 60,this.stats_ypos + 16,playerHP * 2.5,30);
+        graphics.fillRect(this.stats_xpos + 60, this.stats_ypos + 16, playerHP * ratio, 30);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(this.stats_xpos + 60 + playerHP * 2.5,this.stats_ypos + 16,250 - playerHP * 2.5,30);   
+        graphics.fillRect(this.stats_xpos + 60 + playerHP * ratio, this.stats_ypos + 16, healthBarScale - playerHP * ratio, 30);   
 
 
 
         let playerMP = game.playerStats["MP"]; 
-
+         //HP and MP both have the same max for each level
+         //if that changes, MP will need its own ratio calculation
         graphics.fillStyle(0x0000ff);
-        graphics.fillRect(this.stats_xpos + 60,this.stats_ypos + 56,playerMP * 2.5,30);
+        graphics.fillRect(this.stats_xpos + 60,this.stats_ypos + 56, playerMP * ratio, 30);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(this.stats_xpos + 60 + playerMP * 2.5,this.stats_ypos + 56,250 - playerMP * 2.5,30); 
+        graphics.fillRect(this.stats_xpos + 60 + playerMP * ratio, this.stats_ypos + 56, healthBarScale - playerMP * ratio, 30); 
 
      
     }
     
     showEnemyStats(){
         let graphics = this.add.graphics();
+        
+        //updated 11/2/19 to use the full space on the health bar no matter how many HP it starts with
+        let enemyMaxHP = game.enemies[this.currEnemy]["HP"];
+        const healthBarScale = 250;  //total number of pixels in the health bar
+        let ratio = healthBarScale / enemyMaxHP;  //this is how many pixels per HP
      
         graphics.fillStyle(0x00ba0c);
-        graphics.fillRect(160,116,this.enemyData["HP"] * 2.5,30);
+        graphics.fillRect(160,116,this.enemyData["HP"] * ratio, 30);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(160 + this.enemyData["HP"] * 2.5,116,250 - this.enemyData["HP"] * 2.5,30);
+        graphics.fillRect(160 + this.enemyData["HP"] * ratio, 116, healthBarScale - this.enemyData["HP"] * ratio, 30);
     }
     
     selectRandomEnemy(){

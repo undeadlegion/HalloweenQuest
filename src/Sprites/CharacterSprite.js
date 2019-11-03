@@ -94,7 +94,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
     
     startBattle(){
-      let rand = Math.round(Math.random() * 1000);
+      let rand = Math.round(Math.random() * 500);
       if(rand == 3){
           this.scene.events.emit('startBattle');
       }
