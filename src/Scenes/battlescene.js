@@ -32,11 +32,13 @@ export default class FightScene extends Phaser.Scene {
       
         //select a random enemy each time a battle starts
         //this.currEnemy = this.selectRandomEnemy();
-        this.currEnemy;
+        this.currEnemy; //for the way it is spelled as a key in the JSON data
+        this.currentEnemy; //for the user-friendly text
         
         //get the enemy data from enemies.js
         //this.enemyData = JSON.parse(JSON.stringify(game.enemies[this.currEnemy]));
         this.enemyData;
+        
         
         //get the player data from CharacterStats.js
         this.pHP = game.playerStats["HP"];
@@ -96,7 +98,7 @@ preload(){
         this.pEXP = game.playerStats["EXP"];
         this.pLevel = game.playerStats["LVL"];
      
-        let currentEnemy = game.enemies[this.currEnemy]['name'];
+        this.currentEnemy = game.enemies[this.currEnemy]['name'];
      
      
      //player and enemy sprite images
@@ -106,65 +108,7 @@ preload(){
      let player = this.add.sprite(50,300,'playerSprite').setOrigin(0);
      player.setScale(2.5);
      
-     let graphics = this.add.graphics();
-     
-     //enemy stats box
-     graphics.fillStyle(0x000000);
-     graphics.fillRoundedRect(120,70,200,50,15);
-     graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(120,70,200,50,15);
-     graphics.fillStyle(0xffffff);
-     graphics.fillRoundedRect(100,100,330,60,15);
-     graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(100,100,330,60,15);
-     this.add.text(120, 120, "HP", { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
-     this.add.text(130, 75, currentEnemy, { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
-      
-     
-     //player stats box
-     graphics.fillStyle(0x000000);
-     graphics.fillRoundedRect(this.stats_xpos + 20,this.stats_ypos - 30,210,50,15);
-     graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(this.stats_xpos + 20,this.stats_ypos - 30,210,50,15);
-     graphics.fillStyle(0xffffff);
-     graphics.fillRoundedRect(this.stats_xpos,this.stats_ypos,330,210,15);
-     graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(this.stats_xpos,this.stats_ypos,330,210,15);
-     this.add.text(this.stats_xpos + 30, this.stats_ypos - 25, "Player", { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
-     this.add.text(this.stats_xpos + 20, this.stats_ypos + 20, "HP", { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
-     this.add.text(this.stats_xpos + 20, this.stats_ypos + 60, "MP", { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
-     
-     
-     
-     //player action buttons
-     
-     let btnAttack = this.add.image(this.stats_xpos + 50, this.stats_ypos + 100, 'attack').setOrigin(0);
-     btnAttack.setScale(0.04);
-     btnAttack.setInteractive();
-     btnAttack.on('pointerup', () => {
-         this.doAttack(this.currEnemy);
-     });
-     
-     let btnDefend = this.add.image(this.stats_xpos + 170, this.stats_ypos + 100, 'defend').setOrigin(0);
-     btnDefend.setScale(0.04);
-     btnDefend.setInteractive();
-     btnDefend.on('pointerup', () => {
-         this.doDefend();
-     });
-     
-     let btnMagic = this.add.image(this.stats_xpos + 50, this.stats_ypos + 150, 'magic').setOrigin(0);
-     btnMagic.setScale(0.04);
-     btnMagic.setInteractive();
-     btnMagic.on('pointerup', () => {
-         this.doMagic();
-     });
-     
-     let btnRun = this.add.image(this.stats_xpos + 170, this.stats_ypos + 150, 'runbtn').setOrigin(0);
-     btnRun.setScale(0.04);
-     btnRun.setInteractive();
-     btnRun.on('pointerup', () => {
-      this.scene.start('OverworldScene');
-    });
+        this.drawScreenBasics();
      
     this.scene.get("MagicBattleMenu").events.on('updatePlayerStats', () => {
         console.log("Update Player Stats");
@@ -172,7 +116,11 @@ preload(){
         //refresh the values of HP and MP
         this.pHP = game.playerStats["HP"];
         this.pMP = game.playerStats["MP"];
-        this.showPlayerStats(); 
+        
+        //update screen
+        this.drawScreenBasics();
+        this.showPlayerStats();
+        this.showEnemyStats(); 
     });
 
      this.showPlayerStats();
@@ -180,6 +128,69 @@ preload(){
      this.showNoBattle();
      
      //end of create function
+    }
+    
+    drawScreenBasics(){
+        //this function draws the stat boxes and action buttons
+             let graphics = this.add.graphics();
+     
+     //enemy stats box
+     graphics.fillStyle(0x000000);
+     graphics.fillRoundedRect(120,50,250,50,15);
+     graphics.lineStyle(5,0x000000);
+     graphics.strokeRoundedRect(120,50,250,50,15);
+     graphics.fillStyle(0xffffff);
+     graphics.fillRoundedRect(100,80,330,60,15);
+     graphics.lineStyle(5,0x000000);
+     graphics.strokeRoundedRect(100,80,330,60,15);
+     this.add.text(120, 98, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
+     this.add.text(130, 55, this.currentEnemy, { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
+      
+     
+     //player stats box
+     graphics.fillStyle(0x000000);
+     graphics.fillRoundedRect(this.stats_xpos + 20,this.stats_ypos - 30,180,50,15);
+     graphics.lineStyle(5,0x000000);
+     graphics.strokeRoundedRect(this.stats_xpos + 20,this.stats_ypos - 30,180,50,15);
+     graphics.fillStyle(0xffffff);
+     graphics.fillRoundedRect(this.stats_xpos,this.stats_ypos,330,210,15);
+     graphics.lineStyle(5,0x000000);
+     graphics.strokeRoundedRect(this.stats_xpos,this.stats_ypos,330,210,15);
+     this.add.text(this.stats_xpos + 30, this.stats_ypos - 25, "Player", { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
+     this.add.text(this.stats_xpos + 20, this.stats_ypos + 18, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
+     this.add.text(this.stats_xpos + 20, this.stats_ypos + 58, "MP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
+     
+     
+     
+     //player action buttons
+     
+     let btnAttack = this.add.image(this.stats_xpos + 50, this.stats_ypos + 120, 'attack').setOrigin(0);
+     btnAttack.setScale(0.04);
+     btnAttack.setInteractive();
+     btnAttack.on('pointerup', () => {
+         this.doAttack(this.currEnemy);
+     });
+     
+     let btnDefend = this.add.image(this.stats_xpos + 170, this.stats_ypos + 120, 'defend').setOrigin(0);
+     btnDefend.setScale(0.04);
+     btnDefend.setInteractive();
+     btnDefend.on('pointerup', () => {
+         this.doDefend();
+     });
+     
+     let btnMagic = this.add.image(this.stats_xpos + 50, this.stats_ypos + 160, 'magic').setOrigin(0);
+     btnMagic.setScale(0.04);
+     btnMagic.setInteractive();
+     btnMagic.on('pointerup', () => {
+         this.doMagic();
+     });
+     
+     let btnRun = this.add.image(this.stats_xpos + 170, this.stats_ypos + 160, 'runbtn').setOrigin(0);
+     btnRun.setScale(0.04);
+     btnRun.setInteractive();
+     btnRun.on('pointerup', () => {
+      this.scene.start('OverworldScene');
+    });
     }
     
     showNoBattle(){
@@ -212,21 +223,26 @@ preload(){
         let ratio = healthBarScale / maxHP;  //this is how many pixels per HP
 
         graphics.fillStyle(0x00ba0c);
-        graphics.fillRect(this.stats_xpos + 60, this.stats_ypos + 16, playerHP * ratio, 30);
+        graphics.fillRect(this.stats_xpos + 60, this.stats_ypos + 16, playerHP * ratio, 22);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(this.stats_xpos + 60 + playerHP * ratio, this.stats_ypos + 16, healthBarScale - playerHP * ratio, 30);   
+        graphics.fillRect(this.stats_xpos + 60 + playerHP * ratio, this.stats_ypos + 16, healthBarScale - playerHP * ratio, 22);   
 
 
+        //11/3/19 - show the numbers under the health bar
+        this.add.text(this.stats_xpos + 245, this.stats_ypos + 40, playerHP + "/" + maxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
 
         let playerMP = game.playerStats["MP"]; 
          //HP and MP both have the same max for each level
          //if that changes, MP will need its own ratio calculation
         graphics.fillStyle(0x0000ff);
-        graphics.fillRect(this.stats_xpos + 60,this.stats_ypos + 56, playerMP * ratio, 30);
+        graphics.fillRect(this.stats_xpos + 60,this.stats_ypos + 56, playerMP * ratio, 22);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(this.stats_xpos + 60 + playerMP * ratio, this.stats_ypos + 56, healthBarScale - playerMP * ratio, 30); 
+        graphics.fillRect(this.stats_xpos + 60 + playerMP * ratio, this.stats_ypos + 56, healthBarScale - playerMP * ratio, 22); 
 
-     
+
+        //11/3/19 - show the numbers under the magic bar
+        this.add.text(this.stats_xpos + 245, this.stats_ypos + 81, playerMP + "/" + maxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
+
     }
     
     showEnemyStats(){
@@ -238,10 +254,13 @@ preload(){
         let ratio = healthBarScale / enemyMaxHP;  //this is how many pixels per HP
      
         graphics.fillStyle(0x00ba0c);
-        graphics.fillRect(160,116,this.enemyData["HP"] * ratio, 30);
+        graphics.fillRect(160,96,this.enemyData["HP"] * ratio, 22);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(160 + this.enemyData["HP"] * ratio, 116, healthBarScale - this.enemyData["HP"] * ratio, 30);
-    }
+        graphics.fillRect(160 + this.enemyData["HP"] * ratio, 96, healthBarScale - this.enemyData["HP"] * ratio, 22);
+
+        //11/3/19 - show the numbers under the enemy health bar
+        this.add.text(350, 120, this.enemyData["HP"] + "/" + enemyMaxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
+}
     
     selectRandomEnemy(){
         
@@ -375,7 +394,9 @@ preload(){
         game.playerStats["MP"] = this.pMP;
 
         //update screen
+        this.drawScreenBasics();
         this.showPlayerStats();
+        this.showEnemyStats();
         
         if(this.pHP == 0){
             let timer = this.time.delayedCall(1000, this.gameOver, [], this);  
@@ -424,6 +445,7 @@ preload(){
         }
         
         //update screen
+        this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
         
@@ -463,6 +485,7 @@ preload(){
         this.pHP = game.playerStats["HP"];
 
         //update screen
+        this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
         
