@@ -33,22 +33,17 @@ import jnbAudio2 from '../assets/audio/Eeheeheehaa.mp3';
 import jnbAudio3 from '../assets/audio/HelOooo.mp3';
 import jnbAudio4 from '../assets/audio/Ehehehehaa.mp3';
 import jnbAudio5 from '../assets/audio/Nanananana.mp3';
-/*
-School Bully
-HeyWhatsUp.mp3
-ReadyBoys.mp3
-DontMessWSugarCrew.mp3
-GoodOlOneTwo.mp3
-GetTheFunkOut.mp3
-SugarHench1.mp3
-Yo!.mp3
+import sbAudio1 from '../assets/audio/HeyWhatsUp.mp3';
+import sbAudio2 from '../assets/audio/ReadyBoys.mp3';
+import sbAudio3 from '../assets/audio/DontMessWSugarCrew.mp3';
+import sbAudio4 from '../assets/audio/GoodOlOneTwo.mp3';
+import sbAudio5 from '../assets/audio/GetTheFunkOut.mp3';
+import sbAudio6 from '../assets/audio/SugarHench1.mp3';
+import sbAudio7 from '../assets/audio/Yo.mp3';
+import shbAudio1 from '../assets/audio/AllCandyMine.mp3';
+import shbAudio2 from '../assets/audio/Wrahaha1.mp3';
+import shbAudio3 from '../assets/audio/Wrahaha2.mp3';
 
-Shadow Beast 
-AllCandyMine.mp3
-Wrahaha1.mp3
-Wrahaha2.mp3
-
-*/
 
 export default class FightScene extends Phaser.Scene {
     constructor (key) {
@@ -61,7 +56,7 @@ export default class FightScene extends Phaser.Scene {
         }
         
         //player stats box position reference anchor
-        this.stats_xpos = 400;
+        this.stats_xpos = 410;
         this.stats_ypos = 350;
       
         //select a random enemy each time a battle starts
@@ -87,48 +82,57 @@ export default class FightScene extends Phaser.Scene {
         //variable that will be used in choosing who attacks first
         this.turn = 0;
       
-  }
-    
+    }
 
 
-preload(){
-    this.load.image('fightscene', fightScene);
-    this.load.image('playerSprite', playerSprite);
-    this.load.image('trollCauldron', trollCauldron);
-    this.load.image('jak_n_box', jak_n_box);
-    this.load.image('schoolBully', schoolBully);
-    this.load.image('shadowBeast', shadowBeast);
-    this.load.image('shyNosferatu', shyNosferatu);
-    this.load.image('bedSheetGhost', bedSheetGhost);
-    this.load.image('unsureFranky', unsureFranky);
-    this.load.image('skellOnStrings', skellOnStrings);
-    this.load.image('attack', attack);
-    this.load.image('defend', defend);
-    this.load.image('magic', magic);
-    this.load.image('runbtn', runbtn);
-    
-    //load audio
-    this.load.audio('bsg1', bsgAudio1);
-    this.load.audio('bsg2', bsgAudio2);
-    this.load.audio('sn1', snAudio1);
-    this.load.audio('sn2', snAudio2);
-    this.load.audio('tc1', tcAudio1);
-    this.load.audio('tc2', tcAudio2);
-    this.load.audio('tc3', tcAudio3);
-    this.load.audio('tc4', tcAudio4);
-    this.load.audio('tc5', tcAudio5);
-    this.load.audio('sos1', sosAudio1);
-    this.load.audio('sos2', sosAudio2);
-    this.load.audio('uf1', ufAudio1);
-    this.load.audio('uf2', ufAudio2);
-    this.load.audio('jnb1', jnbAudio1);
-    this.load.audio('jnb2', jnbAudio2);
-    this.load.audio('jnb3', jnbAudio3);
-    this.load.audio('jnb4', jnbAudio4);
-    this.load.audio('jnb5', jnbAudio5);
-    
-    
-}
+    preload(){
+        this.load.image('fightscene', fightScene);
+        this.load.image('playerSprite', playerSprite);
+        this.load.image('trollCauldron', trollCauldron);
+        this.load.image('jak_n_box', jak_n_box);
+        this.load.image('schoolBully', schoolBully);
+        this.load.image('shadowBeast', shadowBeast);
+        this.load.image('shyNosferatu', shyNosferatu);
+        this.load.image('bedSheetGhost', bedSheetGhost);
+        this.load.image('unsureFranky', unsureFranky);
+        this.load.image('skellOnStrings', skellOnStrings);
+        this.load.image('attack', attack);
+        this.load.image('defend', defend);
+        this.load.image('magic', magic);
+        this.load.image('runbtn', runbtn);
+
+        //load audio
+        this.load.audio('bsg1', bsgAudio1);
+        this.load.audio('bsg2', bsgAudio2);
+        this.load.audio('sn1', snAudio1);
+        this.load.audio('sn2', snAudio2);
+        this.load.audio('tc1', tcAudio1);
+        this.load.audio('tc2', tcAudio2);
+        this.load.audio('tc3', tcAudio3);
+        this.load.audio('tc4', tcAudio4);
+        this.load.audio('tc5', tcAudio5);
+        this.load.audio('sos1', sosAudio1);
+        this.load.audio('sos2', sosAudio2);
+        this.load.audio('uf1', ufAudio1);
+        this.load.audio('uf2', ufAudio2);
+        this.load.audio('jnb1', jnbAudio1);
+        this.load.audio('jnb2', jnbAudio2);
+        this.load.audio('jnb3', jnbAudio3);
+        this.load.audio('jnb4', jnbAudio4);
+        this.load.audio('jnb5', jnbAudio5);
+        this.load.audio('sb1', sbAudio1);
+        this.load.audio('sb2', sbAudio2);
+        this.load.audio('sb3', sbAudio3);
+        this.load.audio('sb4', sbAudio4);
+        this.load.audio('sb5', sbAudio5);
+        this.load.audio('sb6', sbAudio6);
+        this.load.audio('sb7', sbAudio7);
+        this.load.audio('shb1', shbAudio1);
+        this.load.audio('shb2', shbAudio2);
+        this.load.audio('shb3', shbAudio3);
+        
+
+    }
     create() {
         if(this.debugLog){
             console.log("Battle Scene Create");
@@ -189,21 +193,22 @@ preload(){
      //end of create function
     }
     
+    
     drawScreenBasics(){
         //this function draws the stat boxes and action buttons
-             let graphics = this.add.graphics();
+        let graphics = this.add.graphics();
      
      //enemy stats box
      graphics.fillStyle(0x000000);
-     graphics.fillRoundedRect(120,50,250,50,15);
+     graphics.fillRoundedRect(90,50,250,50,15);
      graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(120,50,250,50,15);
+     graphics.strokeRoundedRect(90,50,250,50,15);
      graphics.fillStyle(0xffffff);
-     graphics.fillRoundedRect(100,80,330,60,15);
+     graphics.fillRoundedRect(70,80,330,60,15);
      graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(100,80,330,60,15);
-     this.add.text(120, 98, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
-     this.add.text(130, 55, this.currentEnemy, { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
+     graphics.strokeRoundedRect(70,80,330,60,15);
+     this.add.text(90, 98, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
+     this.add.text(100, 55, this.currentEnemy, { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
       
      
      //player stats box
@@ -252,28 +257,37 @@ preload(){
     });
     }
     
+    
+    drawScreenMessage(msgText){
+        //this function displays messages throughout the battle
+        const maxMsgWidth = 200;
+        let graphics = this.add.graphics();
+
+        graphics.fillStyle(0xffffcc);
+        graphics.fillRoundedRect(200,190,220,90,15);
+        graphics.lineStyle(5,0x000000);
+        graphics.strokeRoundedRect(200,190,220,90,15);
+        this.add.text(230, 210, msgText, { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000', wordWrap: {width: maxMsgWidth}});
+        
+    }
+    
+    
     showNoBattle(){
         //reset the turn variable
         this.turn = 0;
         
         //before or after each battle, show a message
-        let graphics = this.add.graphics();
-
-        graphics.fillStyle(0xffffff);
-        graphics.fillRoundedRect(200,200,170,100,15);
-        graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(200,200,170,100,15);
-        this.add.text(230, 220, "CHOOSE", { fontFamily: 'Courier New', fontSize: '19pt', color: '#000000'});
-        this.add.text(220, 250, "AN ACTION", { fontFamily: 'Courier New', fontSize: '19pt', color: '#000000'});
+        this.drawScreenMessage("CHOOSE AN ACTION");
 
     }
     
-     showPlayerStats(){
+    
+    showPlayerStats(){
          
         let graphics = this.add.graphics();
         //show current player stats
-         
-         
+
+
          //updated 11/2/19 to use LVL max as denominator rather than 100
          //this makes the full space on the health bar used
         let playerHP = game.playerStats["HP"]; 
@@ -304,6 +318,7 @@ preload(){
 
     }
     
+    
     showEnemyStats(){
         let graphics = this.add.graphics();
         
@@ -313,13 +328,14 @@ preload(){
         let ratio = healthBarScale / enemyMaxHP;  //this is how many pixels per HP
      
         graphics.fillStyle(0x00ba0c);
-        graphics.fillRect(160,96,this.enemyData["HP"] * ratio, 22);
+        graphics.fillRect(130,96,this.enemyData["HP"] * ratio, 22);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(160 + this.enemyData["HP"] * ratio, 96, healthBarScale - this.enemyData["HP"] * ratio, 22);
+        graphics.fillRect(130 + this.enemyData["HP"] * ratio, 96, healthBarScale - this.enemyData["HP"] * ratio, 22);
 
         //11/3/19 - show the numbers under the enemy health bar
-        this.add.text(350, 120, this.enemyData["HP"] + "/" + enemyMaxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
-}
+        this.add.text(320, 120, this.enemyData["HP"] + "/" + enemyMaxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
+    }
+    
     
     selectRandomEnemy(){
         
@@ -356,7 +372,6 @@ preload(){
         if(this.debugLog){
             console.log("Attack Selected!");
         }
-        
         
         //figure out who goes first
         let firstmove;
@@ -401,30 +416,10 @@ preload(){
             this.turn = 2;
             let timer = this.time.delayedCall(3000, this.doEnemyDamage, [], this);
             //this.doEnemyDamage();
-        } 
-        
-
-        
-        /*
-            step 1 - figure out who goes first - higher speed Stat
-            step 2/ - calculate HP damge to enemy and HP damage to player
-            enemy HP damage = players attack stat + players weapon stat - enemys defense Stat
-            subtract from enemy HP
-            player HP damage is a mirror formula
-            dialog "Player attacks"
-            screen shake animation
-            update on screen HP stats for enemy
-            dialog "Enemy attacks"
-            screen shake animation
-            update on screen HP for player
-            check if anyone is dead
-            if enemy is dead - go to overworld, get +1 EXP
-            if player dies, game over
-            
-            */
-        
-        
+        }
     }
+    
+    
     doDefend(){
         //this is what happens when the defend button is pressed
         //only the enemy attacks, not player
@@ -435,14 +430,7 @@ preload(){
         }
         
         //on screen message
-        let graphics = this.add.graphics();
-
-        graphics.fillStyle(0xffffff);
-        graphics.fillRoundedRect(200,200,170,100,15);
-        graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(200,200,170,100,15);
-        this.add.text(220, 220, "Enemy", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
-        this.add.text(220, 260, "Attacks", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
+        this.drawScreenMessage("Enemy Attacks");
 
         //calculate damage
         let dam = this.enemyData["Attack"] - Math.round((this.pDefense + this.pWeapon) * 1.5); // need to adjust for armor also
@@ -467,6 +455,8 @@ preload(){
             let timer = this.time.delayedCall(1000, this.gameOver, [], this);  
         }
     }
+    
+    
     doMagic(){
         //this is what happens when the magic button is pressed
         console.log("Magic!");
@@ -474,28 +464,18 @@ preload(){
         this.scene.launch("MagicBattleMenu");
     }
  
+    
     doEnemyDamage(){
 
         console.log("Player attacks");
         
-        
         //on screen message
-        let graphics = this.add.graphics();
-
-
-        graphics.fillStyle(0xffffff);
-        graphics.fillRoundedRect(200,200,170,100,15);
-        graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(200,200,170,100,15);
-        this.add.text(220, 220, "Player", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
-        this.add.text(220, 260, "Attacks", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
+        this.drawScreenMessage("Player Attacks");
 
         //attack animation
         this.cameras.main.shake(200, 0.02);
         
         //calculate the damage
-        //for testing, increase pAttack
-        //this.pAttack += 20;
         let dam = this.pAttack + this.pWeapon - this.enemyData["Defense"];
         if(dam < 1){ dam = 1;}
         if(dam > this.enemyData["HP"]){ dam = this.enemyData["HP"];}
@@ -525,19 +505,15 @@ preload(){
         }
     }
     
+    
     doPlayerDamage(){
         
         if(this.debugLog){
             console.log("Enemy attacks");
         }
-        let graphics = this.add.graphics();
-
-        graphics.fillStyle(0xffffff);
-        graphics.fillRoundedRect(200,200,170,100,15);
-        graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(200,200,170,100,15);
-        this.add.text(220, 220, "Enemy", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
-        this.add.text(220, 260, "Attacks", { fontFamily: 'Courier New', fontSize: '24pt', color: '#000000'});
+        
+        //on screen message
+        this.drawScreenMessage("Enemy Attacks");
 
         this.cameras.main.shake(200, 0.02);
         let dam = this.enemyData["Attack"] - this.pDefense;
@@ -563,6 +539,7 @@ preload(){
             let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
         }
     }
+    
     
     enemyDefeated(){
         //adjust stats
@@ -619,30 +596,24 @@ preload(){
         console.log("Enemy HP in js library: " + game.enemies[this.currEnemy]["HP"]);
         }
         
-        
         //on screen feedback
-        let graphics = this.add.graphics();
-
-        graphics.fillStyle(0xffffff);
-        graphics.fillRoundedRect(200,200,170,100,15);
-        graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(200,200,170,100,15);
-        this.add.text(220, 220, "Enemy", { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000'});
-        this.add.text(220, 250, "Defeated", { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000'});
+        this.drawScreenMessage("Enemy Defeated");
 
         //wait 1 second, then return to Overworld
         let timer = this.time.delayedCall(1000, this.returnToOverworld, [], this); 
     }
     
+    
     returnToOverworld(){
-        this.scene.stop('FightScene');
-        this.scene.setActive('OverworldScene');
+        this.scene.start('OverworldScene');
     }
+    
     
     gameOver(){
         this.scene.start('GameOver');
         this.scene.stop('OverworldScene');
     }
+   
     
     playEnemyAudio(){
         // play the music
