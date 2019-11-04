@@ -14,7 +14,41 @@ import defend from '../assets/battle/Defend.png';
 import magic from '../assets/battle/Magic.png';
 import runbtn from '../assets/battle/Run.png';
 
+//audio imports
+import bsgAudio1 from '../assets/audio/FiveMoreMin.mp3';
+import bsgAudio2 from '../assets/audio/OOOh.mp3';
+import snAudio1 from '../assets/audio/ShyDontLook.mp3';
+import snAudio2 from '../assets/audio/ShyOOhh.mp3';
+import tcAudio1 from '../assets/audio/Magiluck.mp3';
+import tcAudio2 from '../assets/audio/Balalalala.mp3';
+import tcAudio3 from '../assets/audio/Bwathtatatata.mp3';
+import tcAudio4 from '../assets/audio/DoYouWantCandy.mp3';
+import tcAudio5 from '../assets/audio/EhDahShllp.mp3';
+import sosAudio1 from '../assets/audio/MyMotherSays.mp3';
+import sosAudio2 from '../assets/audio/WhoYouCallinPuppet.mp3';
+import ufAudio1 from '../assets/audio/UnsureHiScare.mp3';
+import ufAudio2 from '../assets/audio/UnsureWrar.mp3';
+import jnbAudio1 from '../assets/audio/Aheheha1.mp3';
+import jnbAudio2 from '../assets/audio/Eeheeheehaa.mp3';
+import jnbAudio3 from '../assets/audio/HelOooo.mp3';
+import jnbAudio4 from '../assets/audio/Ehehehehaa.mp3';
+import jnbAudio5 from '../assets/audio/Nanananana.mp3';
+/*
+School Bully
+HeyWhatsUp.mp3
+ReadyBoys.mp3
+DontMessWSugarCrew.mp3
+GoodOlOneTwo.mp3
+GetTheFunkOut.mp3
+SugarHench1.mp3
+Yo!.mp3
 
+Shadow Beast 
+AllCandyMine.mp3
+Wrahaha1.mp3
+Wrahaha2.mp3
+
+*/
 
 export default class FightScene extends Phaser.Scene {
     constructor (key) {
@@ -73,6 +107,27 @@ preload(){
     this.load.image('magic', magic);
     this.load.image('runbtn', runbtn);
     
+    //load audio
+    this.load.audio('bsg1', bsgAudio1);
+    this.load.audio('bsg2', bsgAudio2);
+    this.load.audio('sn1', snAudio1);
+    this.load.audio('sn2', snAudio2);
+    this.load.audio('tc1', tcAudio1);
+    this.load.audio('tc2', tcAudio2);
+    this.load.audio('tc3', tcAudio3);
+    this.load.audio('tc4', tcAudio4);
+    this.load.audio('tc5', tcAudio5);
+    this.load.audio('sos1', sosAudio1);
+    this.load.audio('sos2', sosAudio2);
+    this.load.audio('uf1', ufAudio1);
+    this.load.audio('uf2', ufAudio2);
+    this.load.audio('jnb1', jnbAudio1);
+    this.load.audio('jnb2', jnbAudio2);
+    this.load.audio('jnb3', jnbAudio3);
+    this.load.audio('jnb4', jnbAudio4);
+    this.load.audio('jnb5', jnbAudio5);
+    
+    
 }
     create() {
         if(this.debugLog){
@@ -82,12 +137,16 @@ preload(){
         this.currEnemy = this.selectRandomEnemy();
         //get the enemy data from enemies.js
         this.enemyData = JSON.parse(JSON.stringify(game.enemies[this.currEnemy]));
+
+        
         if(this.debugLog){
             console.log("Enemy: " + this.enemyData['name']);
             console.log(this.enemyData);
             console.log("Player Stats");
             console.log(game.playerStats);        }
         
+        //play audio for the appropriate enemy
+        this.playEnemyAudio();
 
         this.pHP = game.playerStats["HP"];
         this.pMP = game.playerStats["MP"];
@@ -264,25 +323,31 @@ preload(){
     
     selectRandomEnemy(){
         
-        let rand = Math.random();
-        if(this.debugLog){
-            console.log("Select a random enemy");
-            console.log("Random number: " + rand);
-        }
-        var counter = 0.0;
+        
+        //first filter the list to only include enemies that can appear on this level
+        let filteredEnemies = [];
+        
         for(let enemy in game.enemies){
             
-            counter += game.enemies[enemy]["probability"];
+            let minLevel = game.enemies[enemy]["min level"];
+            let maxLevel = game.enemies[enemy]["max level"];
             
-            if(this.debugLog){
-                console.log(enemy + ": " + game.enemies[enemy]["probability"]);
-                console.log(counter);
-            }
-            
-            if (counter > rand){
-                return enemy;
+            if(minLevel <= this.pLevel && maxLevel >= this.pLevel){
+                filteredEnemies.push(enemy);
             }
         }
+        
+        //now choose a random enemy from the filtered list
+        let rand = Math.floor(Math.random()*filteredEnemies.length);
+        
+        if(this.debugLog){
+            console.log("Filtered enemies");
+            console.log(filteredEnemies);
+            console.log("Select a random enemy");
+            console.log(filteredEnemies[rand]);
+        }
+        return filteredEnemies[rand];
+        
     }
     
     
@@ -575,6 +640,15 @@ preload(){
     
     gameOver(){
         this.scene.start('GameOver');
+    }
+    
+    playEnemyAudio(){
+        // play the music
+        let audiolist = game.enemiesaudio[this.currEnemy];
+        console.log(audiolist);
+        let rand = Math.floor(Math.random() * audiolist.length);
+        const music = this.sound.add(audiolist[rand]);
+        music.play();
     }
 //end of class
 };

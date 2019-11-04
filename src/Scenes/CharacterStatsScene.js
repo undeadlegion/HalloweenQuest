@@ -43,6 +43,12 @@ export default class CharacterStatsScene extends Phaser.Scene {
             game.scene.stop('StatsPopUp');
         });
 
+    let keyObj2 = this.input.keyboard.addKey('z');
+        keyObj2.on('up', function(e){
+            
+            game.scene.resume('OverworldScene');
+            game.scene.stop('StatsPopUp');
+        });
     }
 
     closeStats(){

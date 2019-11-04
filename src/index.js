@@ -8,6 +8,7 @@ import StatsPopUp from './Scenes/CharacterStatsScene';
 import GameOver from './Scenes/GameOverScene';
 import playerStats from './Sprites/CharacterStats.js';
 import enemies from './enemies.js';
+import enemiesaudio from './enemiesaudio.js';
 
 class Game extends Phaser.Game {
   constructor() {
@@ -15,6 +16,7 @@ class Game extends Phaser.Game {
       
     this.enemies = enemies;
     this.playerStats = playerStats;
+    this.enemiesaudio = enemiesaudio;
       
     this.scene.add('TitleScene', TitleScene);
     this.scene.add('OverworldScene', OverworldScene);

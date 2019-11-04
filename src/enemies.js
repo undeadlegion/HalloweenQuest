@@ -6,6 +6,8 @@ export default {
     "skellOnStrings": {
         "name": "Skell on Strings",
         "probability": 0.12,
+        "min level": 2,
+        "max level": 10,
         "scale": 0.2,
         "xpos": 80,
         "ypos": 0,
@@ -21,6 +23,8 @@ export default {
     "bedSheetGhost": {
         "name": "Bed Sheet Ghost",
         "probability": 0.15,
+        "min level": 1,
+        "max level": 10,
         "scale": 0.18,
         "xpos": 70,
         "ypos": -10,
@@ -36,6 +40,8 @@ export default {
     "unsureFranky": {
         "name": "Unsure Franky",
         "probability": 0.15,
+        "min level": 2,
+        "max level": 10,
         "scale": 0.2,
         "xpos": 50,
         "ypos": 0,
@@ -51,6 +57,8 @@ export default {
     "jak_n_box": {
         "name": "Jak N Box",
         "probability": 0.13,
+        "min level": 3,
+        "max level": 10,
         "scale": 0.2,
         "xpos": 0,
         "ypos": 0,
@@ -66,6 +74,8 @@ export default {
     "schoolBully": {
         "name": "School Bully",
         "probability": 0.02,
+        "min level": 5,
+        "max level": 10,
         "scale": 0.18,
         "xpos": 0,
         "ypos": 0,
@@ -81,6 +91,8 @@ export default {
     "shadowBeast": {
         "name": "Shadow Beast",
         "probability": 0.03,
+        "min level": 5,
+        "max level": 10,
         "scale": 0.24,
         "xpos": 0,
         "ypos": -20,
@@ -96,6 +108,8 @@ export default {
     "shyNosferatu": {
         "name": "Shy Nosferatu",
         "probability": 0.2,
+        "min level": 1,
+        "max level": 10,
         "scale": 0.25,
         "xpos": 0,
         "ypos": -30,
@@ -111,6 +125,8 @@ export default {
     "trollCauldron": {
         "name": "Troll Cauldron",
         "probability": 0.2,
+        "min level": 1,
+        "max level": 10,
         "scale": 0.33,
         "xpos": 0,
         "ypos": -90,

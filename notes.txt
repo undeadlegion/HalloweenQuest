@@ -1,7 +1,30 @@
-Close stats box
-Delay between attacks
-Enemy HP not updating
-Music
-check position and scale of new enemies
+TO DO
+1. Update enemy max and min level data - when provided by John
+2. Finish adding audio for Shadow Beast and School Bully
+3. Visual feedback when an enemy is defeated
+4. Magic - Fireball function
+5. Magic - Buff function
+6. Adjust run function to use speed and 50% chance of running if slower
+ 
+ 
+ISSUES AND QUESTIONS
+1. Battle scene create runs multiple times - sometimes - why???
+2. Soundtrack is added (layered on top) each time you return to the overworld
+3. What to do if player clicks attack again before last attack is over
+4. Do all Magic buttons show up or only the ones that are available?
+5. Menus from overworld - right now we only have stats but it should include magic and equipment
+6. If you do a magic spell in battle, does it count as a turn and does the enemy attack?
+7. Need details of how each magic spell works (formulas)
+
 
 ECECEC - attack screen hex code
+
+DONE
+1. Increase frequency of encounter
+2. Use full health bar space, not 100 HP denominator
+3. Display numbers under HP and MP
+4. Display MP cost of each spell
+--------------------------------------
+5. Use z to close stats window in overworld
+6. Enemy min level and max level to appear
+7. Add battle sounds for enemies
