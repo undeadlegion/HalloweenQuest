@@ -26,7 +26,7 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
     
     
     create(){
-        let xpos = 435;
+        let xpos = 455;
         let ypos = 360; 
         
         let graphics = this.add.graphics();

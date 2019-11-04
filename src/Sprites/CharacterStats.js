@@ -30,6 +30,8 @@ Speed: 10
 */
 
 export default {
+    "overworldX": 0, //store overworld position during battles
+    "overworldY": 0, //store overworld position during battles
     "LVL": 1,
     "EXP": 0,
     "HP": 10,
