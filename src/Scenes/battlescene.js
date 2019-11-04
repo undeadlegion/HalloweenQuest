@@ -635,11 +635,13 @@ preload(){
     }
     
     returnToOverworld(){
-        this.scene.start('OverworldScene');
+        this.scene.stop('FightScene');
+        this.scene.setActive('OverworldScene');
     }
     
     gameOver(){
         this.scene.start('GameOver');
+        this.scene.stop('OverworldScene');
     }
     
     playEnemyAudio(){
