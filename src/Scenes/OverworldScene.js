@@ -14,6 +14,10 @@ import cauldronEmptyAsset from '../assets/items/cauldron-empty.png';
 import themeAudio from '../assets/audio/SpookyJam1.wav';
 
 export default class OverworldScene extends Phaser.Scene {
+    constructor(key){
+        super(key);
+        this.audioFlag = true;
+    }
   preload() {
     this.load.image('star', starAsset);
     this.load.image('coin', coinAsset);
@@ -104,24 +108,31 @@ export default class OverworldScene extends Phaser.Scene {
     this.collectedKeys = [];
     // this.physics.add.collider(this.player, this.cauldrons);
 
+    //prevent duplicate event listeners
+    this.events.off('startBattle');
     this.events.on('startBattle', () => {
       this.scene.start('FightScene');
     });
 
+    this.events.off('showStatsWindow');
     this.events.on('showStatsWindow', () => {
         
       this.scene.launch('StatsPopUp');
       this.scene.pause();
     });
 
-    // play the music
-    const music = this.sound.add('theme');
-    music.play();
+    // play the music - check the audio flag to avoid duplicate
+    if(this.audioFlag){
+        const music = this.sound.add('theme');
+        music.play();
+        this.audioFlag = false;
     // this.loader.start(AssetManifest);
     // this.loader.load().then(() => {
     //   const music = this.sound.add('SpookyJam1.wav');
     //   music.play();
-    // });
+    // });        
+    }
+
   }
 
   update() {
