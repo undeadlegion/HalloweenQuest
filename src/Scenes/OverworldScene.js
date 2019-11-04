@@ -17,6 +17,7 @@ export default class OverworldScene extends Phaser.Scene {
     constructor(key){
         super(key);
         this.audioFlag = true;
+        this.startFlag = true;
     }
   preload() {
     this.load.image('star', starAsset);
@@ -44,14 +45,24 @@ export default class OverworldScene extends Phaser.Scene {
 
 
     // create the player
-    this.map.findObject('objects', (obj) => {
-      if (obj.name === 'Start') {
-        console.log(obj);
-        this.player = new CharacterSprite(this, obj.x, obj.y, 'player');
+    if(this.startFlag){
+        this.map.findObject('objects', (obj) => {
+          if (obj.name === 'Start') {
+            console.log(obj);
+            this.player = new CharacterSprite(this, obj.x, obj.y, 'player');
+            this.player.setCollideWorldBounds(true);
+            this.createPlayerAnimations();
+          }
+        });        
+        this.startFlag = false;
+    } else {
+        let playerx = game.playerStats["overworldX"];
+        let playery = game.playerStats["overworldY"];
+        this.player = new CharacterSprite(this, playerx, playery, 'player');
         this.player.setCollideWorldBounds(true);
         this.createPlayerAnimations();
-      }
-    });
+    }
+
 
     // create the camera
     this.cameras.main.startFollow(this.player);
@@ -111,7 +122,9 @@ export default class OverworldScene extends Phaser.Scene {
     //prevent duplicate event listeners
     this.events.off('startBattle');
     this.events.on('startBattle', () => {
-      this.scene.start('FightScene');
+        game.playerStats["overworldX"] = this.player.x;
+        game.playerStats["overworldY"] = this.player.y;
+        this.scene.start('FightScene');
     });
 
     this.events.off('showStatsWindow');

@@ -1,4 +1,16 @@
 /* tie together all the data on each enemy
+New enemy encounter rate 
+
+Level 1: Troll Cauldron, Shy Nosferatu  
+Level 2: Troll Cauldron, Shy Nosferatu  
+Level 3:Troll Cauldron, Shy Nosferatu, Unsure Franky
+Level 4:Troll Cauldron, Shy Nosferatu, Unsure Franky, Bed Sheet Ghost 
+Level 5: Unsure Franky, Bed Sheet Ghost, Shy Nosferatu, Skell on Strings 
+Level 6: Unsure Franky, Bed Sheet Ghost, Skell on Strings, Jak N Box  
+Level 7: Bed Sheet Ghost, Skell on Strings, Jak N Box, Shadow Beast   
+Level 8: Skell on Strings, Jak N Box, Shadow Beast, School Bully
+Level 9: Jak N Box, Shadow Beast, School Bully
+Level 10: Shadow Beast, School Bully
 
 */
 
@@ -6,8 +18,8 @@ export default {
     "skellOnStrings": {
         "name": "Skell on Strings",
         "probability": 0.12,
-        "min level": 2,
-        "max level": 10,
+        "min level": 5,
+        "max level": 8,
         "scale": 0.2,
         "xpos": 80,
         "ypos": 0,
@@ -23,8 +35,8 @@ export default {
     "bedSheetGhost": {
         "name": "Bed Sheet Ghost",
         "probability": 0.15,
-        "min level": 1,
-        "max level": 10,
+        "min level": 4,
+        "max level": 7,
         "scale": 0.18,
         "xpos": 70,
         "ypos": -10,
@@ -40,8 +52,8 @@ export default {
     "unsureFranky": {
         "name": "Unsure Franky",
         "probability": 0.15,
-        "min level": 2,
-        "max level": 10,
+        "min level": 3,
+        "max level": 6,
         "scale": 0.2,
         "xpos": 50,
         "ypos": 0,
@@ -57,8 +69,8 @@ export default {
     "jak_n_box": {
         "name": "Jak N Box",
         "probability": 0.13,
-        "min level": 3,
-        "max level": 10,
+        "min level": 6,
+        "max level": 9,
         "scale": 0.2,
         "xpos": 0,
         "ypos": 0,
@@ -74,7 +86,7 @@ export default {
     "schoolBully": {
         "name": "School Bully",
         "probability": 0.02,
-        "min level": 5,
+        "min level": 8,
         "max level": 10,
         "scale": 0.18,
         "xpos": 0,
@@ -91,7 +103,7 @@ export default {
     "shadowBeast": {
         "name": "Shadow Beast",
         "probability": 0.03,
-        "min level": 5,
+        "min level": 7,
         "max level": 10,
         "scale": 0.24,
         "xpos": 0,
@@ -109,7 +121,7 @@ export default {
         "name": "Shy Nosferatu",
         "probability": 0.2,
         "min level": 1,
-        "max level": 10,
+        "max level": 5,
         "scale": 0.25,
         "xpos": 0,
         "ypos": -30,
@@ -126,7 +138,7 @@ export default {
         "name": "Troll Cauldron",
         "probability": 0.2,
         "min level": 1,
-        "max level": 10,
+        "max level": 4,
         "scale": 0.33,
         "xpos": 0,
         "ypos": -90,
