@@ -56,9 +56,12 @@ export default class FightScene extends Phaser.Scene {
         }
         
         //player stats box position reference anchor
-        this.stats_xpos = 410;
+        this.stats_xpos = 430;
         this.stats_ypos = 350;
-      
+        
+        //message box position reference anchor
+        this.msgX = 50;
+        this.msgY = 470;
         //select a random enemy each time a battle starts
         //this.currEnemy = this.selectRandomEnemy();
         this.currEnemy; //for the way it is spelled as a key in the JSON data
@@ -168,7 +171,7 @@ export default class FightScene extends Phaser.Scene {
      this.add.image(0,0,'fightscene').setOrigin(0);
      let enemySprite = this.add.sprite(350 + this.enemyData['xpos'], this.enemyData['ypos'], this.currEnemy).setOrigin(0);
      enemySprite.setScale(this.enemyData['scale']);
-     let player = this.add.sprite(50,300,'playerSprite').setOrigin(0);
+     let player = this.add.sprite(65,200,'playerSprite').setOrigin(0);
      player.setScale(2.5);
      
         this.drawScreenBasics();
@@ -200,15 +203,15 @@ export default class FightScene extends Phaser.Scene {
      
      //enemy stats box
      graphics.fillStyle(0x000000);
-     graphics.fillRoundedRect(90,50,250,50,15);
+     graphics.fillRoundedRect(70,50,250,50,15);
      graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(90,50,250,50,15);
+     graphics.strokeRoundedRect(70,50,250,50,15);
      graphics.fillStyle(0xffffff);
-     graphics.fillRoundedRect(70,80,330,60,15);
+     graphics.fillRoundedRect(50,80,330,60,15);
      graphics.lineStyle(5,0x000000);
-     graphics.strokeRoundedRect(70,80,330,60,15);
-     this.add.text(90, 98, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
-     this.add.text(100, 55, this.currentEnemy, { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
+     graphics.strokeRoundedRect(50,80,330,60,15);
+     this.add.text(70, 98, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
+     this.add.text(80, 55, this.currentEnemy, { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
       
      
      //player stats box
@@ -260,14 +263,15 @@ export default class FightScene extends Phaser.Scene {
     
     drawScreenMessage(msgText){
         //this function displays messages throughout the battle
-        const maxMsgWidth = 200;
+
+        const maxMsgWidth = 290;
         let graphics = this.add.graphics();
 
         graphics.fillStyle(0xffffcc);
-        graphics.fillRoundedRect(200,190,220,90,15);
+        graphics.fillRoundedRect(this.msgX, this.msgY,310,90,15);
         graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(200,190,220,90,15);
-        this.add.text(230, 210, msgText, { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000', wordWrap: {width: maxMsgWidth}});
+        graphics.strokeRoundedRect(this.msgX, this.msgY,310,90,15);
+        this.add.text(this.msgX + 25, this.msgY + 20, msgText, { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000', wordWrap: {width: maxMsgWidth}});
         
     }
     
@@ -328,12 +332,12 @@ export default class FightScene extends Phaser.Scene {
         let ratio = healthBarScale / enemyMaxHP;  //this is how many pixels per HP
      
         graphics.fillStyle(0x00ba0c);
-        graphics.fillRect(130,96,this.enemyData["HP"] * ratio, 22);
+        graphics.fillRect(110,96,this.enemyData["HP"] * ratio, 22);
         graphics.fillStyle(0xdddddd);
-        graphics.fillRect(130 + this.enemyData["HP"] * ratio, 96, healthBarScale - this.enemyData["HP"] * ratio, 22);
+        graphics.fillRect(110 + this.enemyData["HP"] * ratio, 96, healthBarScale - this.enemyData["HP"] * ratio, 22);
 
         //11/3/19 - show the numbers under the enemy health bar
-        this.add.text(320, 120, this.enemyData["HP"] + "/" + enemyMaxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
+        this.add.text(300, 120, this.enemyData["HP"] + "/" + enemyMaxHP, { fontFamily: 'Courier New', fontSize: '12pt', color: '#000000'});
     }
     
     

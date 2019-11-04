@@ -1,6 +1,6 @@
 TO DO
-1. Update enemy max and min level data - when provided by John
-2. Finish adding audio for Shadow Beast and School Bully
+1. Battle pacing and feedback
+2. Loop main music when it finishes (do we have the smaller file yet?)
 3. Visual feedback when an enemy is defeated
 4. Magic - Fireball function
 5. Magic - Buff function
@@ -8,8 +8,6 @@ TO DO
  
  
 ISSUES AND QUESTIONS
-1. Battle scene create runs multiple times - sometimes - why???
-2. Soundtrack is added (layered on top) each time you return to the overworld
 3. What to do if player clicks attack again before last attack is over
 4. Do all Magic buttons show up or only the ones that are available?
 5. Menus from overworld - right now we only have stats but it should include magic and equipment
@@ -28,3 +26,12 @@ DONE
 5. Use z to close stats window in overworld
 6. Enemy min level and max level to appear
 7. Add battle sounds for enemies
+8. Fix duplicate main audio
+9. Fix create function running multiple times in battle scene
+-------------------------------------------
+10. Update enemy max and min level data
+11. Store overworld position during battles, return to last location
+12. Finish adding audio for Bully and SHadow Beast
+13. Battle scene refactor messaging
+--------------------------------------------
+
