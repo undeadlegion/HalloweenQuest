@@ -15,6 +15,9 @@ import magic from '../assets/battle/Magic.png';
 import runbtn from '../assets/battle/Run.png';
 
 //audio imports
+import fightSceneStartAudio from '../assets/audio/WeaponKnifePullFromSand01.wav';
+
+//audio imports for each enemy
 import bsgAudio1 from '../assets/audio/FiveMoreMin.mp3';
 import bsgAudio2 from '../assets/audio/OOOh.mp3';
 import snAudio1 from '../assets/audio/ShyDontLook.mp3';
@@ -105,6 +108,7 @@ export default class FightScene extends Phaser.Scene {
         this.load.image('runbtn', runbtn);
 
         //load audio
+        this.load.audio('fightSceneStartAudio', fightSceneStartAudio);
         this.load.audio('bsg1', bsgAudio1);
         this.load.audio('bsg2', bsgAudio2);
         this.load.audio('sn1', snAudio1);
@@ -152,8 +156,14 @@ export default class FightScene extends Phaser.Scene {
             console.log("Player Stats");
             console.log(game.playerStats);        }
         
-        //play audio for the appropriate enemy
-        this.playEnemyAudio();
+        //play the start audio - work in progress
+        //const startaudio = this.sound.add("fightSceneStartAudio");
+        //startaudio.play();
+        //startaudio.once('complete', this.playEnemyAudio);
+        //this appears to be calling the right function, but then it crashes in a way that looks like
+        //the context of "this" has changed
+
+        this.playEnemyAudio()
 
         this.pHP = game.playerStats["HP"];
         this.pMP = game.playerStats["MP"];
@@ -174,7 +184,7 @@ export default class FightScene extends Phaser.Scene {
      let player = this.add.sprite(65,200,'playerSprite').setOrigin(0);
      player.setScale(2.5);
      
-        this.drawScreenBasics();
+    this.drawScreenBasics();
      
     this.scene.get("MagicBattleMenu").events.on('updatePlayerStats', () => {
         console.log("Update Player Stats");

@@ -29,7 +29,7 @@ export default class CharacterStatsScene extends Phaser.Scene {
     let ypos = 100;
     for(var mykey in playerStats){
         //console.log(mykey);
-        if(mykey != "MAGIC"){
+        if(mykey != "MAGIC" && mykey !="overworldX" && mykey != "overworldY"){
             this.add.text(50, ypos, mykey, { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
             this.add.text(180, ypos, playerStats[mykey], { fontFamily: 'Courier New', fontSize: '18pt', color: '#000000'});
             ypos += 25;
