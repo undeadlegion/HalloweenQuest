@@ -1,3 +1,6 @@
+Currently working on:
+Play the battle start sound, then the enemy sound
+
 TO DO
 1. Battle pacing and feedback
 2. Loop main music when it finishes (do we have the smaller file yet?)
@@ -17,7 +20,9 @@ ISSUES AND QUESTIONS
 
 ECECEC - attack screen hex code
 
+
 DONE
+----------------------------------------
 1. Increase frequency of encounter
 2. Use full health bar space, not 100 HP denominator
 3. Display numbers under HP and MP
@@ -34,4 +39,7 @@ DONE
 12. Finish adding audio for Bully and SHadow Beast
 13. Battle scene refactor messaging
 --------------------------------------------
+14. Reposition message box
+------------------------------------------
+15. Only show magic buttons available at given level
 

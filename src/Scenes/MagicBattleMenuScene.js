@@ -48,60 +48,71 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
       
        //magic action buttons
      
-     let btnHeal = this.add.image(xpos, ypos + 10, 'healbtn').setOrigin(0);
-     btnHeal.setScale(0.35);
-     btnHeal.setInteractive();
-     btnHeal.on('pointerup', () => {
-         console.log("Heal button");
-         this.doSpell('HEAL');
-     });
-     this.add.text(xpos + 50, ypos + 44, game.playerStats["MAGIC"]["HEAL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-      
-     let btnBuff = this.add.image(xpos + 170, ypos + 10, 'buffbtn').setOrigin(0);
-     btnBuff.setScale(0.35);
-     btnBuff.setInteractive();
-     btnBuff.on('pointerup', () => {
-         console.log("Buff button");
-         this.doSpell('BUFF');
-     });
-     this.add.text(xpos + 220, ypos + 44, game.playerStats["MAGIC"]["BUFF"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-
-     let btnBulk = this.add.image(xpos, ypos + 156, 'bulkbtn').setOrigin(0);
-     btnBulk.setScale(0.35);
-     btnBulk.setInteractive();
-     btnBulk.on('pointerup', () => {
-         console.log("Bulk button");
-         this.doSpell('BULK');
-     });
-     this.add.text(xpos + 50, ypos + 191, game.playerStats["MAGIC"]["BULK"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-
-     let btnCharge = this.add.image(xpos + 170, ypos + 76, 'chargebtn').setOrigin(0);
-     btnCharge.setScale(0.35);
-     btnCharge.setInteractive();
-     btnCharge.on('pointerup', () => {
-         console.log("Charge button");
-         this.doSpell('CHARGE');
-     });
-     this.add.text(xpos + 220, ypos + 115, game.playerStats["MAGIC"]["CHARGE"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-
-     let btnFireball = this.add.image(xpos, ypos + 81, 'fireballbtn').setOrigin(0);
-     btnFireball.setScale(0.35);
-     btnFireball.setInteractive();
-     btnFireball.on('pointerup', () => {
-         console.log("Fireball button");
-         this.doSpell('FIREBALL');
-     });
-     this.add.text(xpos + 50, ypos + 115, game.playerStats["MAGIC"]["FIREBALL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-
-      
-     let btnTrickorTreat = this.add.image(xpos + 158, ypos + 150, 'trickortreatbtn').setOrigin(0);
-     btnTrickorTreat.setScale(0.4);
-     btnTrickorTreat.setInteractive();
-     btnTrickorTreat.on('pointerup', () => {
-         console.log("Trick or Treat button");
-         this.doSpell('TRICKORTREAT');
-     });
-     this.add.text(xpos + 220, ypos + 191, game.playerStats["MAGIC"]["TRICKORTREAT"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    if(game.playerStats["MAGIC"]["HEAL"]["Level"] <= game.playerStats["LVL"]){
+         let btnHeal = this.add.image(xpos, ypos + 10, 'healbtn').setOrigin(0);
+         btnHeal.setScale(0.35);
+         btnHeal.setInteractive();
+         btnHeal.on('pointerup', () => {
+             console.log("Heal button");
+             this.doSpell('HEAL');
+         });
+         this.add.text(xpos + 50, ypos + 44, game.playerStats["MAGIC"]["HEAL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    }
+        
+    if(game.playerStats["MAGIC"]["BUFF"]["Level"] <= game.playerStats["LVL"]){
+         let btnBuff = this.add.image(xpos + 170, ypos + 10, 'buffbtn').setOrigin(0);
+         btnBuff.setScale(0.35);
+         btnBuff.setInteractive();
+         btnBuff.on('pointerup', () => {
+             console.log("Buff button");
+             this.doSpell('BUFF');
+         });
+         this.add.text(xpos + 220, ypos + 44, game.playerStats["MAGIC"]["BUFF"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    }
+        
+    if(game.playerStats["MAGIC"]["BULK"]["Level"] <= game.playerStats["LVL"]){
+         let btnBulk = this.add.image(xpos, ypos + 156, 'bulkbtn').setOrigin(0);
+         btnBulk.setScale(0.35);
+         btnBulk.setInteractive();
+         btnBulk.on('pointerup', () => {
+             console.log("Bulk button");
+             this.doSpell('BULK');
+         });
+         this.add.text(xpos + 50, ypos + 191, game.playerStats["MAGIC"]["BULK"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    }
+        
+    if(game.playerStats["MAGIC"]["CHARGE"]["Level"] <= game.playerStats["LVL"]){
+         let btnCharge = this.add.image(xpos + 170, ypos + 76, 'chargebtn').setOrigin(0);
+         btnCharge.setScale(0.35);
+         btnCharge.setInteractive();
+         btnCharge.on('pointerup', () => {
+             console.log("Charge button");
+             this.doSpell('CHARGE');
+         });
+         this.add.text(xpos + 220, ypos + 115, game.playerStats["MAGIC"]["CHARGE"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    }
+        
+    if(game.playerStats["MAGIC"]["FIREBALL"]["Level"] <= game.playerStats["LVL"]){
+         let btnFireball = this.add.image(xpos, ypos + 81, 'fireballbtn').setOrigin(0);
+         btnFireball.setScale(0.35);
+         btnFireball.setInteractive();
+         btnFireball.on('pointerup', () => {
+             console.log("Fireball button");
+             this.doSpell('FIREBALL');
+         });
+         this.add.text(xpos + 50, ypos + 115, game.playerStats["MAGIC"]["FIREBALL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    }
+        
+    if(game.playerStats["MAGIC"]["TRICKORTREAT"]["Level"] <= game.playerStats["LVL"]){
+         let btnTrickorTreat = this.add.image(xpos + 158, ypos + 150, 'trickortreatbtn').setOrigin(0);
+         btnTrickorTreat.setScale(0.4);
+         btnTrickorTreat.setInteractive();
+         btnTrickorTreat.on('pointerup', () => {
+             console.log("Trick or Treat button");
+             this.doSpell('TRICKORTREAT');
+         });
+         this.add.text(xpos + 220, ypos + 191, game.playerStats["MAGIC"]["TRICKORTREAT"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+    }
         
     let keyObj = this.input.keyboard.addKey('shift');
         keyObj.on('up', function(e){
