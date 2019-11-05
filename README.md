@@ -1,3 +1,10 @@
+# Halloween Quest
+Welcome! This repository contains our team's submission to the Spooky Game Jam 2019.
+
+Open the link to try the latest version:
+[Play Halloween Quest](https://undeadlegion.github.io/HalloweenQuest/)
+
+
 # Phaser 3 Webpack Project Template
 
 A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/)
