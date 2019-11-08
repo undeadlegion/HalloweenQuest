@@ -13,6 +13,7 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
     this.parent = parent;
     this.width = 400;
     this.height = 400;
+      
   }
   
     preload(){
@@ -46,30 +47,33 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
 
       
       
-       //magic action buttons
-     
-    if(game.playerStats["MAGIC"]["HEAL"]["Level"] <= game.playerStats["LVL"]){
-         let btnHeal = this.add.image(xpos, ypos + 10, 'healbtn').setOrigin(0);
-         btnHeal.setScale(0.35);
-         btnHeal.setInteractive();
-         btnHeal.on('pointerup', () => {
-             console.log("Heal button");
-             this.doSpell('HEAL');
-         });
-         this.add.text(xpos + 50, ypos + 44, game.playerStats["MAGIC"]["HEAL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-    }
-        
-    if(game.playerStats["MAGIC"]["BUFF"]["Level"] <= game.playerStats["LVL"]){
-         let btnBuff = this.add.image(xpos + 170, ypos + 10, 'buffbtn').setOrigin(0);
-         btnBuff.setScale(0.35);
-         btnBuff.setInteractive();
-         btnBuff.on('pointerup', () => {
-             console.log("Buff button");
-             this.doSpell('BUFF');
-         });
-         this.add.text(xpos + 220, ypos + 44, game.playerStats["MAGIC"]["BUFF"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
-    }
-        
+        //magic action buttons
+
+        if(game.playerStats["MAGIC"]["HEAL"]["Level"] <= game.playerStats["LVL"]){
+            let btnHeal = this.add.image(xpos, ypos + 10, 'healbtn').setOrigin(0);
+            btnHeal.setScale(0.35);
+            btnHeal.setInteractive();
+            btnHeal.on('pointerup', () => {
+                console.log("Heal button");
+                this.doSpell('HEAL');
+            });
+            btnHeal.on('pointerover',() => {
+                console.log("hover");
+            });
+            this.add.text(xpos + 50, ypos + 44, game.playerStats["MAGIC"]["HEAL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+        }
+
+        if(game.playerStats["MAGIC"]["BUFF"]["Level"] <= game.playerStats["LVL"]){
+            let btnBuff = this.add.image(xpos + 170, ypos + 10, 'buffbtn').setOrigin(0);
+            btnBuff.setScale(0.35);
+            btnBuff.setInteractive();
+            btnBuff.on('pointerup', () => {
+                console.log("Buff button");
+                this.doSpell('BUFF');
+            });
+            this.add.text(xpos + 220, ypos + 44, game.playerStats["MAGIC"]["BUFF"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
+        }
+
     if(game.playerStats["MAGIC"]["BULK"]["Level"] <= game.playerStats["LVL"]){
          let btnBulk = this.add.image(xpos, ypos + 156, 'bulkbtn').setOrigin(0);
          btnBulk.setScale(0.35);
@@ -115,62 +119,80 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
     }
         
     let keyObj = this.input.keyboard.addKey('shift');
-        keyObj.on('up', function(e){
-            
-            game.scene.resume('FightScene');
-            game.scene.stop('MagicBattleMenu');
-        });
+    keyObj.on('up', this.returnToBattle, this);
 
-      let keyObj2 = this.input.keyboard.addKey('z');
-        keyObj2.on('up', function(e){
-            
-            game.scene.resume('FightScene');
-            game.scene.stop('MagicBattleMenu');
-        });
+    let keyObj2 = this.input.keyboard.addKey('z');
+    keyObj2.on('up', this.returnToBattle, this);
+        
     }
 
+
     doSpell(spell){
-        
+
         let spellLevel = game.playerStats["MAGIC"][spell]["Level"];
         let spellCost = game.playerStats["MAGIC"][spell]["MP used"];
         let MP = game.playerStats["MP"];
         let pLevel = game.playerStats["LVL"];
 
-        //first, check that spell is available
-        if(spellLevel <= pLevel){
-            //now check that sufficient MP are available
-            if(spellCost <= MP){
-                //do the spell
-                console.log("Do spell: " + spell);
-                if(spell == "HEAL"){
-                    game.playerStats["HP"] += pLevel * 5;
-                    //max HP is determined by your levels
-                    if (game.playerStats["HP"] > pLevel * 10){
-                        game.playerStats["HP"] = pLevel * 10;
-                    }
-                    game.playerStats["MP"] -= spellCost;
-                    console.log("Player Stats");
-                    console.log(game.playerStats);
-                    this.events.emit('updatePlayerStats');
-                    game.scene.resume('FightScene');
-                    game.scene.stop('MagicBattleMenu');
+
+        // check that sufficient MP are available
+        if(spellCost <= MP){
+            //do the spell
+            console.log("Do spell: " + spell);
+            if(spell == "HEAL"){
+                let tempHP = game.playerStats["HP"];
+                game.playerStats["HP"] += pLevel * 5;
+                //max HP is determined by your levels
+                if (game.playerStats["HP"] > pLevel * 10){
+                    game.playerStats["HP"] = pLevel * 10;
                 }
-            } else {
-                //INSUFFICIENT MP TO USE THIS SPELL
-                //show message
-                //kick player back to Battle Scene
-                game.scene.resume('FightScene');
-                game.scene.stop('MagicBattleMenu');
+                tempHP  = game.playerStats["HP"] - tempHP;
+                game.playerStats["MP"] -= spellCost;
+                this.events.emit('playerHeal');
+                console.log("Player Stats");
+                console.log(game.playerStats);
+                
+                let timer = this.time.delayedCall(3000,this.spellComplete, [], this);
             }
         } else {
-            //TO DO: show message that spell is not available at this level
-            
+            //INSUFFICIENT MP TO USE THIS SPELL
+            //show message
+            this.events.emit("insufficientMPforSpell");
             //kick player back to Battle Scene
-            game.scene.resume('FightScene');
-            game.scene.stop('MagicBattleMenu');
+            this.returnToBattle();   
+        }
+    }
+    
+    drawScreenMessage(msgText, fontsize){
+        //this function displays messages throughout the battle
+
+        const maxMsgWidth = 290;
+        let graphics = this.add.graphics();
+        
+        if (fontsize === undefined){
+            fontsize = '20pt';
         }
         
+        graphics.fillStyle(0xffffcc);
+        graphics.fillRoundedRect(this.msgX, this.msgY,310,90,15);
+        graphics.lineStyle(5,0x000000);
+        graphics.strokeRoundedRect(this.msgX, this.msgY,310,90,15);
+        this.add.text(this.msgX + 25, this.msgY + 20, msgText, { fontFamily: 'Courier New', fontSize: fontsize, color: '#000000', wordWrap: {width: maxMsgWidth}});
         
+        this.time.delayedCall(3000, this.returnToBattle, [], this);
+    }
+    
+    
+    returnToBattle(){
+        this.events.emit("exitMagicMenu");
+        game.scene.resume('FightScene');
+        game.scene.stop('MagicBattleMenu');
+    }
+    
+    spellComplete(){
+        this.events.emit('updatePlayerStats');
+        game.scene.resume('FightScene');
+        game.scene.stop('MagicBattleMenu');
     }
     //end of class
 }

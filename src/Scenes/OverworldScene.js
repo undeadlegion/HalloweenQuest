@@ -129,7 +129,7 @@ export default class OverworldScene extends Phaser.Scene {
 
     this.events.off('showStatsWindow');
     this.events.on('showStatsWindow', () => {
-        
+        game.playerStats["launchSource"] = 'overworld';
       this.scene.launch('StatsPopUp');
       this.scene.pause();
     });

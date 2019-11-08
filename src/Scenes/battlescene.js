@@ -84,9 +84,20 @@ export default class FightScene extends Phaser.Scene {
         this.pSpeed = game.playerStats["SPEED"];
         this.pEXP = game.playerStats["EXP"];
         this.pLevel = game.playerStats["LVL"];
+        this.pMgDef = game.playerStats["MG DEF"];
       
         //variable that will be used in choosing who attacks first
+        //0: no current action
+        //1: first turn of attack
+        //2: second turn of attack
+        //101: defense sequence
+        //201: first turn of magic attack
+        //202: second turn of magic attack
         this.turn = 0;
+        
+        //variable to prevent multiple events raised from Magic Menu
+        //TO DO: debug why this is happening
+        this.spellAvailable = true;
       
     }
 
@@ -140,12 +151,19 @@ export default class FightScene extends Phaser.Scene {
         
 
     }
+    
+    
     create() {
         if(this.debugLog){
             console.log("Battle Scene Create");
             console.log("NEW BATTLE SCENE");
         }
+        
+        //prevent early clicks
+        this.turn = 99;
+        
         this.currEnemy = this.selectRandomEnemy();
+        
         //get the enemy data from enemies.js
         this.enemyData = JSON.parse(JSON.stringify(game.enemies[this.currEnemy]));
 
@@ -154,16 +172,8 @@ export default class FightScene extends Phaser.Scene {
             console.log("Enemy: " + this.enemyData['name']);
             console.log(this.enemyData);
             console.log("Player Stats");
-            console.log(game.playerStats);        }
-        
-        //play the start audio - work in progress
-        //const startaudio = this.sound.add("fightSceneStartAudio");
-        //startaudio.play();
-        //startaudio.once('complete', this.playEnemyAudio);
-        //this appears to be calling the right function, but then it crashes in a way that looks like
-        //the context of "this" has changed
-
-        this.playEnemyAudio()
+            console.log(game.playerStats);        
+        }
 
         this.pHP = game.playerStats["HP"];
         this.pMP = game.playerStats["MP"];
@@ -173,9 +183,9 @@ export default class FightScene extends Phaser.Scene {
         this.pSpeed = game.playerStats["SPEED"];
         this.pEXP = game.playerStats["EXP"];
         this.pLevel = game.playerStats["LVL"];
+        this.pMgDef = game.playerStats["MG DEF"];
      
         this.currentEnemy = game.enemies[this.currEnemy]['name'];
-     
      
      //player and enemy sprite images
      this.add.image(0,0,'fightscene').setOrigin(0);
@@ -184,9 +194,13 @@ export default class FightScene extends Phaser.Scene {
      let player = this.add.sprite(65,200,'playerSprite').setOrigin(0);
      player.setScale(2.5);
      
+        
     this.drawScreenBasics();
      
     this.scene.get("MagicBattleMenu").events.on('updatePlayerStats', () => {
+        if(this.turn != 201){
+            return;
+        }
         console.log("Update Player Stats");
         
         //refresh the values of HP and MP
@@ -197,12 +211,39 @@ export default class FightScene extends Phaser.Scene {
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats(); 
-    });
+        this.turn = 202;
 
+        let magicTimer = this.time.delayedCall(3000, this.doPlayerDamage, [], this);
+        
+    });
+        
+        this.scene.get("MagicBattleMenu").events.on('exitMagicMenu', () => {
+            let magicTimer2 = this.time.delayedCall(700, this.showNoBattle, [], this);
+        });
+        
+        this.scene.get("MagicBattleMenu").events.on('insufficientMPforSpell', () => {
+            this.drawScreenMessage("Insufficient MP for spell");
+            let magicTimer2 = this.time.delayedCall(1000, this.showNoBattle, [], this);
+        });
+        this.scene.get("MagicBattleMenu").events.on('playerHeal', () => {
+            this.drawScreenMessage("Player uses Heal spell");
+        });
      this.showPlayerStats();
      this.showEnemyStats();
-     this.showNoBattle();
+     this.drawScreenMessage("Enemy " + this.enemyData["name"] + " approaches", '18pt');
      
+        
+     //play the audio
+     const startaudio = this.sound.add("fightSceneStartAudio");
+     startaudio.on('complete', this.playEnemyAudio, this);
+     console.log(Date.now());
+     startaudio.play();     
+     
+
+    let keyObj = this.input.keyboard.addKey('shift');
+    keyObj.on('up', this.showStatsWindow, this);
+        
+        
      //end of create function
     }
     
@@ -266,22 +307,26 @@ export default class FightScene extends Phaser.Scene {
      btnRun.setScale(0.04);
      btnRun.setInteractive();
      btnRun.on('pointerup', () => {
-      this.scene.start('OverworldScene');
+         this.doRun();
     });
     }
     
     
-    drawScreenMessage(msgText){
+    drawScreenMessage(msgText, fontsize){
         //this function displays messages throughout the battle
 
         const maxMsgWidth = 290;
         let graphics = this.add.graphics();
-
+        
+        if (fontsize === undefined){
+            fontsize = '20pt';
+        }
+        
         graphics.fillStyle(0xffffcc);
         graphics.fillRoundedRect(this.msgX, this.msgY,310,90,15);
         graphics.lineStyle(5,0x000000);
         graphics.strokeRoundedRect(this.msgX, this.msgY,310,90,15);
-        this.add.text(this.msgX + 25, this.msgY + 20, msgText, { fontFamily: 'Courier New', fontSize: '20pt', color: '#000000', wordWrap: {width: maxMsgWidth}});
+        this.add.text(this.msgX + 25, this.msgY + 20, msgText, { fontFamily: 'Courier New', fontSize: fontsize, color: '#000000', wordWrap: {width: maxMsgWidth}});
         
     }
     
@@ -291,6 +336,9 @@ export default class FightScene extends Phaser.Scene {
         this.turn = 0;
         
         //before or after each battle, show a message
+        this.drawScreenBasics();
+        this.showPlayerStats();
+        this.showEnemyStats();
         this.drawScreenMessage("CHOOSE AN ACTION");
 
     }
@@ -380,72 +428,77 @@ export default class FightScene extends Phaser.Scene {
         
     }
     
+    doRun(){
+        if(this.turn > 0){
+            //an attack is already going on
+            return;
+        }
+        this.drawScreenMessage("Player escapes safely");
+        let runTimer = this.time.delayedCall(2000, this.returnToOverworld, [], this);
+    }
+    
     
     doAttack(){
+        if(this.turn > 0){
+            //an attack is already going on
+            return;
+        }
         //this is what happens when the attack button is pressed
         if(this.debugLog){
             console.log("Attack Selected!");
         }
         
         //figure out who goes first
-        let firstmove;
-        if(this.pSpeed > this.enemyData["Speed"]){
-            firstmove = "player";
-        }
-        else if (this.pSpeed < this.enemyData["Speed"]){
-            firstmove = "enemy";
-        }
-        else {
-            //if there is a tie, make it random
-            let r = Math.random();
-            if (r < 0.5){
-                firstmove = "player";
-            } else{
-                firstmove = "enemy";
-            }
-        }
-        
-        if(this.debugLog){
-            console.log("First Move: " + firstmove);
-        }
+        this.setTurn();
         
         //execute the turns in correct order
-        if(firstmove == "player"){
-            
+        if(this.turn == 1){
             //player goes first
-            this.turn = 1;
             this.doEnemyDamage();
             
-            //then enemy
-            this.turn = 2;
-            let timer = this.time.delayedCall(3000, this.doPlayerDamage, [], this);  
-            //this.doPlayerDamage(pHP, eAttack, pDefense);
-            
-        } else if (firstmove == "enemy"){
+        } else if (this.turn == 2){
             //enemy goes first
-            this.turn = 1;
             this.doPlayerDamage();
-            
-            //then player
-            this.turn = 2;
-            let timer = this.time.delayedCall(3000, this.doEnemyDamage, [], this);
-            //this.doEnemyDamage();
         }
     }
     
     
     doDefend(){
+        
+        if(this.turn > 0){
+            //an attack is already going on
+            return;
+        }
         //this is what happens when the defend button is pressed
         //only the enemy attacks, not player
-        //but player gets upgrades after surviving the attack
+        //but player gets upgrades before the enemy attack
         if(this.debugLog){
             console.log("Defense chosen");
             console.log("Enemy attacks");
         }
+        this.turn = 101;
+        this.drawScreenMessage("Player chooses Defend");
+        let timer = this.time.delayedCall(2000, this.playerDefense, [], this);
+    
+    }
+    
+    
+    playerDefense(){
+        //increase the player stats
+        //update player MP, Defense, Magic Defense
+        let maxMP = this.pLevel * 10;
+        this.pMP = this.pMP + Math.ceil(maxMP * 0.25);
+        if(this.pMP > maxMP){this.pMP = maxMP};
+        game.playerStats["MP"] = this.pMP;
+        
+        this.pDefense = Math.ceil(this.pDefense * 1.5);
+        this.pMgDef = Math.ceil(this.pMgDef * 1.5);
         
         //on screen message
-        this.drawScreenMessage("Enemy Attacks");
-
+        this.drawScreenMessage("Player restores some MP");
+        let timer = this.time.delayedCall(2000, this.doPlayerDamage, [], this);
+        
+        /*
         //calculate damage
         let dam = this.enemyData["Attack"] - Math.round((this.pDefense + this.pWeapon) * 1.5); // need to adjust for armor also
         if(dam < 0){ dam = 0;}
@@ -456,9 +509,7 @@ export default class FightScene extends Phaser.Scene {
         game.playerStats["HP"] = this.pHP - dam;
         this.pHP = game.playerStats["HP"];
         
-        //update player MP
-        this.pMP = Math.round(this.pMP * 1.25);
-        game.playerStats["MP"] = this.pMP;
+        
 
         //update screen
         this.drawScreenBasics();
@@ -468,26 +519,67 @@ export default class FightScene extends Phaser.Scene {
         if(this.pHP == 0){
             let timer = this.time.delayedCall(1000, this.gameOver, [], this);  
         }
+        */
     }
     
     
     doMagic(){
+        if(this.turn > 0){
+            //an attack is already going on
+            return;
+        }
         //this is what happens when the magic button is pressed
         console.log("Magic!");
+        this.drawScreenMessage("Player chooses Magic");
+        this.turn = 201;
         this.scene.pause();
         this.scene.launch("MagicBattleMenu");
     }
+    
  
+    setTurn(){
+        let firstmove;
+        if(this.pSpeed > this.enemyData["Speed"]){
+            firstmove = "player";
+            this.turn = 1;
+        }
+        else if (this.pSpeed < this.enemyData["Speed"]){
+            firstmove = "enemy";
+            this.turn = 2;
+        }
+        else {
+            //if there is a tie, make it random
+            let r = Math.random();
+            if (r < 0.5){
+                firstmove = "player";
+                this.turn = 1;
+            } else{
+                firstmove = "enemy";
+                this.turn = 2;
+            }
+        }
+        
+        if(this.debugLog){
+            console.log("First Move: " + firstmove);
+        }
+    }
+    
     
     doEnemyDamage(){
 
         console.log("Player attacks");
+        console.log("Turn: " + this.turn);
         
-        //on screen message
+
+        //update screen
+        this.drawScreenBasics();
+        this.showPlayerStats();
+        this.showEnemyStats();
         this.drawScreenMessage("Player Attacks");
 
-        //attack animation
+        //shake!!
         this.cameras.main.shake(200, 0.02);
+        
         
         //calculate the damage
         let dam = this.pAttack + this.pWeapon - this.enemyData["Defense"];
@@ -502,20 +594,26 @@ export default class FightScene extends Phaser.Scene {
         if(this.debugLog){
             console.log("Updated Enemy HP: " + this.enemyData["HP"]);
         }
-        
         //update screen
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
+        this.drawScreenMessage("Player Attacks");
         
         //handle enemy defeat
         if(this.enemyData["HP"] == 0){
             let timer = this.time.delayedCall(1000, this.enemyDefeated, [], this);  
-        }
-        
-        // reset if this was the second turn
-        if (this.turn == 2){
-            let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
+        } else{
+            //keep going
+            //manage the turns
+            if(this.turn == 1){
+                this.turn = 2;
+                console.log(Date.now());
+                this.time.addEvent({delay: 3000, callback: this.doPlayerDamage, callbackScope: this});
+            }
+            else if (this.turn == 2){
+                let timer3 = this.time.delayedCall(3000, this.showNoBattle, [], this);
+            }
         }
     }
     
@@ -524,12 +622,21 @@ export default class FightScene extends Phaser.Scene {
         
         if(this.debugLog){
             console.log("Enemy attacks");
+            console.log(Date.now());
+            console.log("this HP: " + this.pHP);
+            console.log("game HP: " + game.playerStats["HP"]);
         }
         
-        //on screen message
+        //update screen
+        this.drawScreenBasics();
+        this.showPlayerStats();
+        this.showEnemyStats();
         this.drawScreenMessage("Enemy Attacks");
 
+        //shake
+        this.cameras.main.shakeEffect.reset();
         this.cameras.main.shake(200, 0.02);
+        
         let dam = this.enemyData["Attack"] - this.pDefense;
         if(dam < 1){ dam = 1;}
         if(dam > this.pHP){ dam = this.pHP;}
@@ -543,19 +650,31 @@ export default class FightScene extends Phaser.Scene {
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
+        this.drawScreenMessage("Enemy Attacks");
         
         if(this.pHP == 0){
             let timer = this.time.delayedCall(1000, this.gameOver, [], this);  
         }
         
-        // reset if this was the second turn
-        if (this.turn == 2){
-            let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
+        //reset defense stats if Defend action was chosen
+        if(this.turn = 101){
+            this.pDefense = game.playerStats["DEF"];
+            this.pMgDef = game.playerStats["MG DEF"];
         }
+        
+        // manage the turns
+        if (this.turn == 1){
+            this.turn == 2
+            let timer = this.time.delayedCall(3000, this.doEnemyDamage, [], this);
+        }
+        else if (this.turn == 2 || this.turn == 101 || this.turn == 202){
+            let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
+        } 
     }
     
     
     enemyDefeated(){
+        this.drawScreenMessage("Enemy defeated");
         //adjust stats
         //give EXP
         this.pEXP = this.pEXP + this.enemyData["EXP given"];
@@ -585,7 +704,11 @@ export default class FightScene extends Phaser.Scene {
         }
         
         //next Level, increase stats
+        let returnDelay = 3000;
         if(this.pEXP >= levelEXP[this.pLevel + 1]){
+            
+            returnDelay = 6000;
+            
             this.pLevel += 1;
             game.playerStats['LVL'] = this.pLevel;
             this.pEXP -= levelEXP[this.pLevel];
@@ -598,28 +721,41 @@ export default class FightScene extends Phaser.Scene {
             game.playerStats['MG DEF'] = Math.floor(this.pLevel * 7.5);
             game.playerStats['SPEED'] = this.pLevel * 10;
             
+            this.drawScreenBasics();
+            this.showPlayerStats();
+            this.showEnemyStats();
+            
             if(this.debugLog){
                 console.log("New Level Reached");
                 console.log("new level: " + this.pLevel);
                 console.log("new EXP: " + this.pEXP);
             }
+            let timeDefeat = this.time.delayedCall(3000,this.drawScreenMessage,["Congratulations, Level " + this.pLevel + " reached"], this);
+            //if(this.pLevel in [2, 4, 6, 8, 9]){
+            //    returnDelay = 9000;
+            //    let timeSpell = this.time.delayedCall(6000, this.drawScreenMessage,["Well done, you learned a new spell"]);
+            //}
         }
         
-        // do we need to reset the enemy stats for the next time it comes back???
-        if(this.debugLog){
-        console.log("Enemy HP in js library: " + game.enemies[this.currEnemy]["HP"]);
-        }
-        
-        //on screen feedback
-        this.drawScreenMessage("Enemy Defeated");
 
-        //wait 1 second, then return to Overworld
-        let timer = this.time.delayedCall(1000, this.returnToOverworld, [], this); 
+
+        //enemy defeat animation
+        
+
+        //return to Overworld
+        let timer = this.time.delayedCall(returnDelay, this.returnToOverworld, [], this); 
     }
     
     
     returnToOverworld(){
         this.scene.start('OverworldScene');
+    }
+    
+    
+    showStatsWindow(){
+        game.playerStats["launchSource"] = "battle";
+        this.scene.launch('StatsPopUp'); //launch means both scenes are open
+        this.scene.pause();
     }
     
     
@@ -631,11 +767,18 @@ export default class FightScene extends Phaser.Scene {
     
     playEnemyAudio(){
         // play the music
+        console.log(Date.now());
+        console.log(this.currEnemy);
         let audiolist = game.enemiesaudio[this.currEnemy];
         console.log(audiolist);
         let rand = Math.floor(Math.random() * audiolist.length);
         const music = this.sound.add(audiolist[rand]);
+        music.on('complete', function(){
+            this.showNoBattle();
+        }, this);
         music.play();
+        
     }
+    
 //end of class
 };
