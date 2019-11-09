@@ -17,12 +17,13 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
   }
   
     preload(){
-        this.load.image('buffbtn', buffbtn);
-        this.load.image('bulkbtn', bulkbtn);
-        this.load.image('chargebtn', chargebtn);
-        this.load.image('fireballbtn', fireballbtn);
-        this.load.image('healbtn', healbtn);
-        this.load.image('trickortreatbtn', trickortreatbtn);
+        this.load
+            .image('buffbtn', buffbtn)
+            .image('bulkbtn', bulkbtn)
+            .image('chargebtn', chargebtn)
+            .image('fireballbtn', fireballbtn)
+            .image('healbtn', healbtn)
+            .image('trickortreatbtn', trickortreatbtn)
     }
     
     
@@ -140,6 +141,7 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
             //do the spell
             console.log("Do spell: " + spell);
             if(spell == "HEAL"){
+                game.turn = 201;
                 let tempHP = game.playerStats["HP"];
                 game.playerStats["HP"] += pLevel * 5;
                 //max HP is determined by your levels
@@ -148,51 +150,29 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
                 }
                 tempHP  = game.playerStats["HP"] - tempHP;
                 game.playerStats["MP"] -= spellCost;
-                this.events.emit('playerHeal');
+                //this.events.emit('playerHeal');
                 console.log("Player Stats");
                 console.log(game.playerStats);
                 
-                let timer = this.time.delayedCall(3000,this.spellComplete, [], this);
+                let timer = this.time.delayedCall(1000,this.returnToBattle, [], this);
             }
         } else {
             //INSUFFICIENT MP TO USE THIS SPELL
             //show message
-            this.events.emit("insufficientMPforSpell");
+            //this.events.emit("insufficientMPforSpell");
             //kick player back to Battle Scene
             this.returnToBattle();   
         }
     }
     
-    drawScreenMessage(msgText, fontsize){
-        //this function displays messages throughout the battle
-
-        const maxMsgWidth = 290;
-        let graphics = this.add.graphics();
-        
-        if (fontsize === undefined){
-            fontsize = '20pt';
-        }
-        
-        graphics.fillStyle(0xffffcc);
-        graphics.fillRoundedRect(this.msgX, this.msgY,310,90,15);
-        graphics.lineStyle(5,0x000000);
-        graphics.strokeRoundedRect(this.msgX, this.msgY,310,90,15);
-        this.add.text(this.msgX + 25, this.msgY + 20, msgText, { fontFamily: 'Courier New', fontSize: fontsize, color: '#000000', wordWrap: {width: maxMsgWidth}});
-        
-        this.time.delayedCall(3000, this.returnToBattle, [], this);
-    }
-    
     
     returnToBattle(){
-        this.events.emit("exitMagicMenu");
-        game.scene.resume('FightScene');
-        game.scene.stop('MagicBattleMenu');
-    }
-    
-    spellComplete(){
-        this.events.emit('updatePlayerStats');
-        game.scene.resume('FightScene');
-        game.scene.stop('MagicBattleMenu');
+
+        if (game.scene.isPaused('FightScene')){
+            game.scene.resume('FightScene');
+            game.scene.stop('MagicBattleMenu');            
+        }
+
     }
     //end of class
 }

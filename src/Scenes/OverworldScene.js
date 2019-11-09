@@ -137,6 +137,7 @@ export default class OverworldScene extends Phaser.Scene {
     // play the music - check the audio flag to avoid duplicate
     if(this.audioFlag){
         const music = this.sound.add('theme');
+        music.setLoop(true);
         music.play();
         this.audioFlag = false;
     // this.loader.start(AssetManifest);

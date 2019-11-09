@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import fightScene from '../assets/battle/white.png';
 import playerSprite from '../assets/battle/player_battle.png';
+
+//enemy images
 import trollCauldron from '../assets/enemies/Troll_Cauldron.png';
 import jak_n_box from '../assets/enemies/Jak_N_Box.png';
 import schoolBully from '../assets/enemies/School_Bully.png';
@@ -9,6 +11,10 @@ import bedSheetGhost from '../assets/enemies/Bedsheet_Ghost.png';
 import shyNosferatu from '../assets/enemies/shy_Nosferatu.png';
 import unsureFranky from '../assets/enemies/Unsure_Franky.png';
 import skellOnStrings from '../assets/enemies/Skell_on_strings.png';
+import sugarDaddyBase from '../assets/enemies/Sugar_Daddy.png';
+import sugarDaddyFinal from '../assets/enemies/Sugar_Daddy_Final.png';
+
+//action buttons
 import attack from '../assets/battle/Attack.png';
 import defend from '../assets/battle/Defend.png';
 import magic from '../assets/battle/Magic.png';
@@ -46,6 +52,12 @@ import sbAudio7 from '../assets/audio/Yo.mp3';
 import shbAudio1 from '../assets/audio/AllCandyMine.mp3';
 import shbAudio2 from '../assets/audio/Wrahaha1.mp3';
 import shbAudio3 from '../assets/audio/Wrahaha2.mp3';
+import sdbAudio1 from '../assets/audio/GetOffMyProp.mp3';
+import sdbAudio2 from '../assets/audio/GetReadyToFunk.mp3';
+import sdbAudio3 from '../assets/audio/GiveYouSugar.mp3';
+import sdbAudio4 from '../assets/audio/MessedWWrongGuy.mp3';
+import sdfAudio1 from '../assets/audio/NowYouKnowSugarDaddy.mp3';
+import sdfAudio2 from '../assets/audio/NOOOO.mp3';
 
 
 export default class FightScene extends Phaser.Scene {
@@ -91,32 +103,38 @@ export default class FightScene extends Phaser.Scene {
         //1: first turn of attack
         //2: second turn of attack
         //101: defense sequence
-        //201: first turn of magic attack
-        //202: second turn of magic attack
-        this.turn = 0;
-        
-        //variable to prevent multiple events raised from Magic Menu
-        //TO DO: debug why this is happening
-        this.spellAvailable = true;
+        //201: first turn of magic attack - HEAL
+        //202: first turn of magic attack - FIREBALL
+        //etc.
+        //210: enemy turn after magic attack
+        game.turn = 0;
       
     }
 
 
     preload(){
-        this.load.image('fightscene', fightScene);
-        this.load.image('playerSprite', playerSprite);
-        this.load.image('trollCauldron', trollCauldron);
-        this.load.image('jak_n_box', jak_n_box);
-        this.load.image('schoolBully', schoolBully);
-        this.load.image('shadowBeast', shadowBeast);
-        this.load.image('shyNosferatu', shyNosferatu);
-        this.load.image('bedSheetGhost', bedSheetGhost);
-        this.load.image('unsureFranky', unsureFranky);
-        this.load.image('skellOnStrings', skellOnStrings);
-        this.load.image('attack', attack);
-        this.load.image('defend', defend);
-        this.load.image('magic', magic);
-        this.load.image('runbtn', runbtn);
+        
+        //enemy images
+        this.load
+            .image('fightscene', fightScene)
+            .image('playerSprite', playerSprite)
+            .image('trollCauldron', trollCauldron)
+            .image('jak_n_box', jak_n_box)
+            .image('schoolBully', schoolBully)
+            .image('shadowBeast', shadowBeast)
+            .image('shyNosferatu', shyNosferatu)
+            .image('bedSheetGhost', bedSheetGhost)
+            .image('unsureFranky', unsureFranky)
+            .image('skellOnStrings', skellOnStrings)
+            .image('sugarDaddyBase', sugarDaddyBase)
+            .image('sugarDaddyFinal', sugarDaddyFinal);
+        
+        //action buttons
+        this.load
+            .image('attack', attack)
+            .image('defend', defend)
+            .image('magic', magic)
+            .image('runbtn', runbtn);
 
         //load audio
         this.load.audio('fightSceneStartAudio', fightSceneStartAudio);
@@ -148,6 +166,13 @@ export default class FightScene extends Phaser.Scene {
         this.load.audio('shb1', shbAudio1);
         this.load.audio('shb2', shbAudio2);
         this.load.audio('shb3', shbAudio3);
+        this.load
+            .audio('sdb1', sdbAudio1)
+            .audio('sdb2', sdbAudio2)
+            .audio('sdb3', sdbAudio3)
+            .audio('sdb4', sdbAudio4)
+            .audio('sdf1', sdfAudio1)
+            .audio('sdf2', sdfAudio2);
         
 
     }
@@ -160,7 +185,7 @@ export default class FightScene extends Phaser.Scene {
         }
         
         //prevent early clicks
-        this.turn = 99;
+        game.turn = 99;
         
         this.currEnemy = this.selectRandomEnemy();
         
@@ -187,64 +212,38 @@ export default class FightScene extends Phaser.Scene {
      
         this.currentEnemy = game.enemies[this.currEnemy]['name'];
      
-     //player and enemy sprite images
-     this.add.image(0,0,'fightscene').setOrigin(0);
-     let enemySprite = this.add.sprite(350 + this.enemyData['xpos'], this.enemyData['ypos'], this.currEnemy).setOrigin(0);
-     enemySprite.setScale(this.enemyData['scale']);
-     let player = this.add.sprite(65,200,'playerSprite').setOrigin(0);
-     player.setScale(2.5);
-     
-        
-    this.drawScreenBasics();
-     
-    this.scene.get("MagicBattleMenu").events.on('updatePlayerStats', () => {
-        if(this.turn != 201){
-            return;
-        }
-        console.log("Update Player Stats");
-        
-        //refresh the values of HP and MP
-        this.pHP = game.playerStats["HP"];
-        this.pMP = game.playerStats["MP"];
-        
-        //update screen
+        //player and enemy sprite images
+        this.add.image(0,0,'fightscene').setOrigin(0);
+        let enemySprite = this.add.sprite(350 + this.enemyData['xpos'], this.enemyData['ypos'], this.currEnemy).setOrigin(0);
+        enemySprite.setScale(this.enemyData['scale']);
+        let player = this.add.sprite(65,200,'playerSprite').setOrigin(0);
+        player.setScale(2.5);
+
+
         this.drawScreenBasics();
+        
+        this.events.on('resume', ()=>{
+            this.afterSpell();
+        });
+     
+
         this.showPlayerStats();
-        this.showEnemyStats(); 
-        this.turn = 202;
+        this.showEnemyStats();
+        this.drawScreenMessage(this.enemyData["name"] + " approaches", '18pt');
 
-        let magicTimer = this.time.delayedCall(3000, this.doPlayerDamage, [], this);
-        
-    });
-        
-        this.scene.get("MagicBattleMenu").events.on('exitMagicMenu', () => {
-            let magicTimer2 = this.time.delayedCall(700, this.showNoBattle, [], this);
-        });
-        
-        this.scene.get("MagicBattleMenu").events.on('insufficientMPforSpell', () => {
-            this.drawScreenMessage("Insufficient MP for spell");
-            let magicTimer2 = this.time.delayedCall(1000, this.showNoBattle, [], this);
-        });
-        this.scene.get("MagicBattleMenu").events.on('playerHeal', () => {
-            this.drawScreenMessage("Player uses Heal spell");
-        });
-     this.showPlayerStats();
-     this.showEnemyStats();
-     this.drawScreenMessage("Enemy " + this.enemyData["name"] + " approaches", '18pt');
-     
-        
-     //play the audio
-     const startaudio = this.sound.add("fightSceneStartAudio");
-     startaudio.on('complete', this.playEnemyAudio, this);
-     console.log(Date.now());
-     startaudio.play();     
-     
 
-    let keyObj = this.input.keyboard.addKey('shift');
-    keyObj.on('up', this.showStatsWindow, this);
-        
-        
-     //end of create function
+        //play the audio
+        const startaudio = this.sound.add("fightSceneStartAudio");
+        startaudio.on('complete', this.playEnemyAudio, this);
+        console.log(Date.now());
+        startaudio.play();     
+
+
+        let keyObj = this.input.keyboard.addKey('shift');
+        keyObj.on('up', this.showStatsWindow, this);
+
+
+        //end of create function
     }
     
     
@@ -274,7 +273,7 @@ export default class FightScene extends Phaser.Scene {
      graphics.fillRoundedRect(this.stats_xpos,this.stats_ypos,330,210,15);
      graphics.lineStyle(5,0x000000);
      graphics.strokeRoundedRect(this.stats_xpos,this.stats_ypos,330,210,15);
-     this.add.text(this.stats_xpos + 30, this.stats_ypos - 25, "Player", { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
+     this.add.text(this.stats_xpos + 30, this.stats_ypos - 25, "Anna", { fontFamily: 'Courier New', fontSize: '16pt', color: '#ffffff'});
      this.add.text(this.stats_xpos + 20, this.stats_ypos + 18, "HP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
      this.add.text(this.stats_xpos + 20, this.stats_ypos + 58, "MP", { fontFamily: 'Courier New', fontSize: '17pt', color: '#000000'});
      
@@ -333,7 +332,7 @@ export default class FightScene extends Phaser.Scene {
     
     showNoBattle(){
         //reset the turn variable
-        this.turn = 0;
+        game.turn = 0;
         
         //before or after each battle, show a message
         this.drawScreenBasics();
@@ -429,17 +428,17 @@ export default class FightScene extends Phaser.Scene {
     }
     
     doRun(){
-        if(this.turn > 0){
+        if(game.turn > 0){
             //an attack is already going on
             return;
         }
-        this.drawScreenMessage("Player escapes safely");
+        this.drawScreenMessage("Anna escapes safely");
         let runTimer = this.time.delayedCall(2000, this.returnToOverworld, [], this);
     }
     
     
     doAttack(){
-        if(this.turn > 0){
+        if(game.turn > 0){
             //an attack is already going on
             return;
         }
@@ -449,14 +448,15 @@ export default class FightScene extends Phaser.Scene {
         }
         
         //figure out who goes first
-        this.setTurn();
+        game.turn = 1;
+        let firstmove = this.setTurn();
         
         //execute the turns in correct order
-        if(this.turn == 1){
+        if(firstmove == "player"){
             //player goes first
             this.doEnemyDamage();
             
-        } else if (this.turn == 2){
+        } else if (firstmove == "enemy"){
             //enemy goes first
             this.doPlayerDamage();
         }
@@ -465,7 +465,7 @@ export default class FightScene extends Phaser.Scene {
     
     doDefend(){
         
-        if(this.turn > 0){
+        if(game.turn > 0){
             //an attack is already going on
             return;
         }
@@ -476,8 +476,8 @@ export default class FightScene extends Phaser.Scene {
             console.log("Defense chosen");
             console.log("Enemy attacks");
         }
-        this.turn = 101;
-        this.drawScreenMessage("Player chooses Defend");
+        game.turn = 101;
+        this.drawScreenMessage("Anna chooses Defend");
         let timer = this.time.delayedCall(2000, this.playerDefense, [], this);
     
     }
@@ -495,7 +495,7 @@ export default class FightScene extends Phaser.Scene {
         this.pMgDef = Math.ceil(this.pMgDef * 1.5);
         
         //on screen message
-        this.drawScreenMessage("Player restores some MP");
+        this.drawScreenMessage("Anna restores some MP");
         let timer = this.time.delayedCall(2000, this.doPlayerDamage, [], this);
         
         /*
@@ -524,16 +524,46 @@ export default class FightScene extends Phaser.Scene {
     
     
     doMagic(){
-        if(this.turn > 0){
+        if(game.turn > 0){
             //an attack is already going on
             return;
         }
         //this is what happens when the magic button is pressed
         console.log("Magic!");
-        this.drawScreenMessage("Player chooses Magic");
-        this.turn = 201;
+        this.drawScreenMessage("Anna chooses Magic");
         this.scene.pause();
         this.scene.launch("MagicBattleMenu");
+    }
+    
+    
+    afterSpell(){
+        console.log("Resume after spell " + game.turn);
+
+        if(game.turn < 201 || game.turn > 206){
+            this.showNoBattle();
+            return;
+        }
+        
+        //refresh the values of HP and MP
+        this.pHP = game.playerStats["HP"];
+        this.pMP = game.playerStats["MP"];
+
+        //update screen
+        this.drawScreenBasics();
+        this.showPlayerStats();
+        this.showEnemyStats(); 
+
+        let spellList = {
+            201: "Heal",
+            202: "Fireball"
+        }
+
+        this.drawScreenMessage("Anna uses " + spellList[game.turn] + " spell");
+
+
+        game.turn = 210;
+        let magicTimer = this.time.delayedCall(3000, this.doPlayerDamage, [], this);
+            
     }
     
  
@@ -541,44 +571,42 @@ export default class FightScene extends Phaser.Scene {
         let firstmove;
         if(this.pSpeed > this.enemyData["Speed"]){
             firstmove = "player";
-            this.turn = 1;
         }
         else if (this.pSpeed < this.enemyData["Speed"]){
             firstmove = "enemy";
-            this.turn = 2;
         }
         else {
             //if there is a tie, make it random
             let r = Math.random();
             if (r < 0.5){
                 firstmove = "player";
-                this.turn = 1;
             } else{
                 firstmove = "enemy";
-                this.turn = 2;
             }
         }
         
         if(this.debugLog){
             console.log("First Move: " + firstmove);
         }
+        return firstmove;
     }
     
     
     doEnemyDamage(){
 
         console.log("Player attacks");
-        console.log("Turn: " + this.turn);
+        console.log("Turn: " + game.turn);
         
 
         //update screen
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
-        this.drawScreenMessage("Player Attacks");
+        this.drawScreenMessage("Anna Attacks");
 
         //shake!!
-        this.cameras.main.shake(200, 0.02);
+        //this.cameras.main.resetFX();
+        //this.cameras.main.shake(200, 0.02);
         
         
         //calculate the damage
@@ -598,20 +626,21 @@ export default class FightScene extends Phaser.Scene {
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
-        this.drawScreenMessage("Player Attacks");
+        this.drawScreenMessage("Anna Attacks");
         
         //handle enemy defeat
         if(this.enemyData["HP"] == 0){
             let timer = this.time.delayedCall(1000, this.enemyDefeated, [], this);  
-        } else{
+        } else {
             //keep going
             //manage the turns
-            if(this.turn == 1){
-                this.turn = 2;
+            if(game.turn == 1){
+                game.turn = 2;
                 console.log(Date.now());
                 this.time.addEvent({delay: 3000, callback: this.doPlayerDamage, callbackScope: this});
             }
-            else if (this.turn == 2){
+            else if (game.turn == 2){
+                game.turn = 0;
                 let timer3 = this.time.delayedCall(3000, this.showNoBattle, [], this);
             }
         }
@@ -631,11 +660,12 @@ export default class FightScene extends Phaser.Scene {
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
-        this.drawScreenMessage("Enemy Attacks");
+        this.drawScreenMessage(this.enemyData['name'] + " attacks");
 
         //shake
-        this.cameras.main.shakeEffect.reset();
-        this.cameras.main.shake(200, 0.02);
+        //this.cameras.main.resetFX();
+        //this.cameras.main.shake(200, 0.02);
+        
         
         let dam = this.enemyData["Attack"] - this.pDefense;
         if(dam < 1){ dam = 1;}
@@ -650,35 +680,44 @@ export default class FightScene extends Phaser.Scene {
         this.drawScreenBasics();
         this.showPlayerStats();
         this.showEnemyStats();
-        this.drawScreenMessage("Enemy Attacks");
+        this.drawScreenMessage(this.enemyData['name'] + " attacks");
         
         if(this.pHP == 0){
             let timer = this.time.delayedCall(1000, this.gameOver, [], this);  
         }
         
         //reset defense stats if Defend action was chosen
-        if(this.turn = 101){
+        if(game.turn == 101){
             this.pDefense = game.playerStats["DEF"];
             this.pMgDef = game.playerStats["MG DEF"];
         }
         
         // manage the turns
-        if (this.turn == 1){
-            this.turn == 2
+        console.log(game.turn);
+        if (game.turn == 1){
+            game.turn = 2;
+            console.log("next turn");
             let timer = this.time.delayedCall(3000, this.doEnemyDamage, [], this);
         }
-        else if (this.turn == 2 || this.turn == 101 || this.turn == 202){
-            let timer = this.time.delayedCall(3000, this.showNoBattle, [], this);
+        else if (game.turn == 2 || game.turn == 101 || game.turn == 210){
+            game.turn = 0;
+            let d = 3000;
+            if(game.turn == 210){d = 6000}
+            let timer = this.time.delayedCall(d, this.showNoBattle, [], this);
         } 
     }
     
     
     enemyDefeated(){
-        this.drawScreenMessage("Enemy defeated");
+        this.drawScreenMessage(this.enemyData['name'] + " defeated");
         //adjust stats
         //give EXP
         this.pEXP = this.pEXP + this.enemyData["EXP given"];
         game.playerStats["EXP"] = this.pEXP;
+        
+        if(this.pLevel < 11){
+            let timeXP = this.time.delayedCall(3000,this.drawScreenMessage,["Anna gained " + this.enemyData["EXP given"] + " XP"], this);
+        }
         
         //check if you need to increase the Level
         let levelEXP = {
@@ -691,7 +730,10 @@ export default class FightScene extends Phaser.Scene {
             7: 30,
             8: 35,
             9: 40,
-            10: 45
+            10: 45,
+            11: 50, 
+            12: 99999999,
+            13: 10
         }
         
         let EXPneeded = levelEXP[this.pLevel];
@@ -704,10 +746,10 @@ export default class FightScene extends Phaser.Scene {
         }
         
         //next Level, increase stats
-        let returnDelay = 3000;
+        let returnDelay = 6000;
         if(this.pEXP >= levelEXP[this.pLevel + 1]){
             
-            returnDelay = 6000;
+            returnDelay += 3000;
             
             this.pLevel += 1;
             game.playerStats['LVL'] = this.pLevel;
@@ -721,16 +763,25 @@ export default class FightScene extends Phaser.Scene {
             game.playerStats['MG DEF'] = Math.floor(this.pLevel * 7.5);
             game.playerStats['SPEED'] = this.pLevel * 10;
             
-            this.drawScreenBasics();
-            this.showPlayerStats();
-            this.showEnemyStats();
+            //this.drawScreenBasics();
+            //this.showPlayerStats();
+            //this.showEnemyStats();
             
             if(this.debugLog){
                 console.log("New Level Reached");
                 console.log("new level: " + this.pLevel);
                 console.log("new EXP: " + this.pEXP);
             }
-            let timeDefeat = this.time.delayedCall(3000,this.drawScreenMessage,["Congratulations, Level " + this.pLevel + " reached"], this);
+            if(this.pLevel < 11){
+                let timeDefeat = this.time.delayedCall(returnDelay - 3000,this.drawScreenMessage,["Congratulations, Level " + this.pLevel + " reached"], this);
+            } else if(this.pLevel == 11) {
+                let timeDefeat = this.time.delayedCall(returnDelay - 3000,this.drawScreenMessage,["Prepare to meet the Sugar Daddy"], this);
+            } else if(this.pLevel == 12) {
+                let timeDefeat = this.time.delayedCall(returnDelay - 6000,this.drawScreenMessage,["But Sugar Daddy will come back stronger", "18pt"], this); 
+            } else if(this.pLevel == 13) {
+                this.showWinScreen();
+            }
+            
             //if(this.pLevel in [2, 4, 6, 8, 9]){
             //    returnDelay = 9000;
             //    let timeSpell = this.time.delayedCall(6000, this.drawScreenMessage,["Well done, you learned a new spell"]);
@@ -743,7 +794,7 @@ export default class FightScene extends Phaser.Scene {
         
 
         //return to Overworld
-        let timer = this.time.delayedCall(returnDelay, this.returnToOverworld, [], this); 
+        let timer = this.time.delayedCall(returnDelay + 1000, this.returnToOverworld, [], this); 
     }
     
     
@@ -761,6 +812,11 @@ export default class FightScene extends Phaser.Scene {
     
     gameOver(){
         this.scene.start('GameOver');
+        this.scene.stop('OverworldScene');
+    }
+    
+    showWinScreen(){
+        this.scene.start('WinScene');
         this.scene.stop('OverworldScene');
     }
    

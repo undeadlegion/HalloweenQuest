@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import GameOverScreen from '../assets/Game_Over.png';
 
-export default class TitleScene extends Phaser.Scene {
+export default class GameOver extends Phaser.Scene {
   constructor(key) {
     super(key);
   }

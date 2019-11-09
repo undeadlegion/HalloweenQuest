@@ -23,5 +23,11 @@ export default {
     ],
     "trollCauldron": [
         "tc1","tc2","tc3","tc4","tc5"
+    ],
+    "sugarDaddyBase": [
+        "sdb1", "sdb2", "sdb3", "sdb4"
+    ], 
+    "sugarDaddyFinal": [
+        "sdf1", "sdf2"
     ]
 }
