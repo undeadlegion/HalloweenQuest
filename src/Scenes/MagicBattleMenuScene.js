@@ -46,8 +46,6 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
         this.add.text(xpos+20, ypos-36, "MAGIC SPELLS", { fontFamily: 'Courier New', fontSize: '18pt', color: '#ffffff'});
     
 
-      
-      
         //magic action buttons
 
         if(game.playerStats["MAGIC"]["HEAL"]["Level"] <= game.playerStats["LVL"]){
@@ -56,7 +54,9 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
             btnHeal.setInteractive();
             btnHeal.on('pointerup', () => {
                 console.log("Heal button");
-                this.doSpell('HEAL');
+                //this.doSpell('HEAL');
+                let timer = this.time.delayedCall(100,this.returnToBattle, [], this);
+                this.scene.get('FightScene').doHealSpell();
             });
             btnHeal.on('pointerover',() => {
                 console.log("hover");
@@ -70,7 +70,9 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
             btnBuff.setInteractive();
             btnBuff.on('pointerup', () => {
                 console.log("Buff button");
-                this.doSpell('BUFF');
+                //this.doSpell('BUFF');
+                let timer = this.time.delayedCall(100,this.returnToBattle, [], this);
+                this.scene.get('FightScene').doBuffSpell();
             });
             this.add.text(xpos + 220, ypos + 44, game.playerStats["MAGIC"]["BUFF"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
         }
@@ -81,7 +83,9 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
          btnBulk.setInteractive();
          btnBulk.on('pointerup', () => {
              console.log("Bulk button");
-             this.doSpell('BULK');
+             //this.doSpell('BULK');
+             let timer = this.time.delayedCall(100,this.returnToBattle, [], this);
+            this.scene.get('FightScene').doBulkSpell();
          });
          this.add.text(xpos + 50, ypos + 191, game.playerStats["MAGIC"]["BULK"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
     }
@@ -92,7 +96,9 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
          btnCharge.setInteractive();
          btnCharge.on('pointerup', () => {
              console.log("Charge button");
-             this.doSpell('CHARGE');
+             //this.doSpell('CHARGE');
+             let timer = this.time.delayedCall(100,this.returnToBattle, [], this);
+             this.scene.get('FightScene').doChargeSpell();
          });
          this.add.text(xpos + 220, ypos + 115, game.playerStats["MAGIC"]["CHARGE"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
     }
@@ -103,7 +109,9 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
          btnFireball.setInteractive();
          btnFireball.on('pointerup', () => {
              console.log("Fireball button");
-             this.doSpell('FIREBALL');
+             //this.doSpell('FIREBALL');
+             let timer = this.time.delayedCall(100,this.returnToBattle, [], this);
+             this.scene.get('FightScene').doFireballSpell();
          });
          this.add.text(xpos + 50, ypos + 115, game.playerStats["MAGIC"]["FIREBALL"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
     }
@@ -114,7 +122,9 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
          btnTrickorTreat.setInteractive();
          btnTrickorTreat.on('pointerup', () => {
              console.log("Trick or Treat button");
-             this.doSpell('TRICKORTREAT');
+             //this.doSpell('TRICKORTREAT');
+             let timer = this.time.delayedCall(100,this.returnToBattle, [], this);
+             this.scene.get('FightScene').doFireballSpell();
          });
          this.add.text(xpos + 220, ypos + 191, game.playerStats["MAGIC"]["TRICKORTREAT"]["MP used"] + "MP", { fontFamily: 'Courier New', fontSize: '14pt', color: '#000000'});
     }
@@ -141,7 +151,6 @@ export default class MagicBattleMenuScene extends Phaser.Scene {
             //do the spell
             console.log("Do spell: " + spell);
             if(spell == "HEAL"){
-                game.turn = 201;
                 let tempHP = game.playerStats["HP"];
                 game.playerStats["HP"] += pLevel * 5;
                 //max HP is determined by your levels

@@ -10,7 +10,8 @@ Level 6: Unsure Franky, Bed Sheet Ghost, Skell on Strings, Jak N Box
 Level 7: Bed Sheet Ghost, Skell on Strings, Jak N Box, Shadow Beast   
 Level 8: Skell on Strings, Jak N Box, Shadow Beast, School Bully
 Level 9: Jak N Box, Shadow Beast, School Bully
-Level 10: Shadow Beast, School Bully
+Level 10: Shadow Beast, School Bullys
+
 
 */
 
@@ -43,7 +44,7 @@ export default {
         "HP": 34,
         "MP": 15,
         "Attack": 28,
-        "Defense": 30,
+        "Defense": 25,
         "Magic Attack": 19,
         "Magic Defense": 30,
         "Speed": 25,
@@ -60,7 +61,7 @@ export default {
         "HP": 22,
         "MP": 0,
         "Attack": 22,
-        "Defense": 20,
+        "Defense": 15,
         "Magic Attack": 0,
         "Magic Defense": 15,
         "Speed": 20,
@@ -71,9 +72,9 @@ export default {
         "probability": 0.13,
         "min level": 6,
         "max level": 9,
-        "scale": 0.2,
-        "xpos": 0,
-        "ypos": 0,
+        "scale": 0.17,
+        "xpos": 40,
+        "ypos": 28,
         "HP": 45,
         "MP": 15,
         "Attack": 40,
@@ -88,9 +89,9 @@ export default {
         "probability": 0.02,
         "min level": 8,
         "max level": 10,
-        "scale": 0.18,
-        "xpos": 0,
-        "ypos": 0,
+        "scale": 0.16,
+        "xpos": 80,
+        "ypos": 10,
         "HP": 60,
         "MP": 15,
         "Attack": 50,
@@ -106,7 +107,7 @@ export default {
         "min level": 7,
         "max level": 10,
         "scale": 0.24,
-        "xpos": 0,
+        "xpos": 30,
         "ypos": -20,
         "HP": 30,
         "MP": 25,

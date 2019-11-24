@@ -233,7 +233,7 @@ export default class FightScene extends Phaser.Scene {
 
 
         //play the audio
-        const startaudio = this.sound.add("fightSceneStartAudio");
+        const startaudio = this.sound.add("fightSceneStartAudio", {volume: 5});
         startaudio.on('complete', this.playEnemyAudio, this);
         console.log(Date.now());
         startaudio.play();     
@@ -426,6 +426,7 @@ export default class FightScene extends Phaser.Scene {
         return filteredEnemies[rand];
         
     }
+    
     
     doRun(){
         if(game.turn > 0){
@@ -814,6 +815,7 @@ export default class FightScene extends Phaser.Scene {
         this.scene.start('GameOver');
         this.scene.stop('OverworldScene');
     }
+    
     
     showWinScreen(){
         this.scene.start('WinScene');

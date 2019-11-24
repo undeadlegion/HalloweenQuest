@@ -8,6 +8,10 @@ import StatsPopUp from './Scenes/CharacterStatsScene';
 import GameOver from './Scenes/GameOverScene';
 import WinScene from './Scenes/WinScene';
 
+
+//test new Fight Scene
+import FightScene2 from './Scenes/FightScene';
+
 import playerStats from './Sprites/CharacterStats.js';
 import enemies from './enemies.js';
 import enemiesaudio from './enemiesaudio.js';
@@ -23,11 +27,13 @@ class Game extends Phaser.Game {
       
     this.scene.add('TitleScene', TitleScene);
     this.scene.add('OverworldScene', OverworldScene);
-    this.scene.add('FightScene', FightScene);
+    this.scene.add('FightScene', FightScene2);
     this.scene.add('MagicBattleMenu', MagicBattleMenu);
     this.scene.add('StatsPopUp', StatsPopUp);
     this.scene.add('GameOver', GameOver);
     this.scene.add('WinScene', WinScene);
+      
+    //this.scene.add('FightScene2', FightScene2);
       
     this.scene.start('TitleScene');
       
